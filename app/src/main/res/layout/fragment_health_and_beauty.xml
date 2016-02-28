@@ -4,6 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-    <include layout="@layout/fragment_crime"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello, Fucker"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

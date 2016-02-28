@@ -3,6 +3,19 @@
     <string name="search_title">Search</string>
 
     <string name="menu_item_favourites">Избранное</string>
+    <string name="menu_item_beauty">Красота и Здоровье</string>
 
     <string name="crime_confirmed">Подтверждено</string>
+
+    <string name="view_navigation_open">Open</string>
+    <string name="view_navigation_close">Close</string>
+
+    <string name="tab_item_beauty">Красота и здоровье</string>
+    <string name="tab_item_buy">Покупки</string>
+    <string name="tab_item_transport">Транспорт</string>
+    <string name="tab_item_pub">Кафе и бары</string>
+    <string name="tab_item_fun">Развлечения</string>
+
+
+
 </resources>

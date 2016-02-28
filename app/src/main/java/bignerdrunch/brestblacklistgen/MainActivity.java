@@ -2,16 +2,17 @@ package bignerdrunch.brestblacklistgen;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import bignerdrunch.brestblacklistgen.adapter.TabPagerFragmentAdapter;
+import bignerdrunch.brestblacklistgen.adapter.TabsFragmentAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,13 +52,37 @@ public class MainActivity extends AppCompatActivity {
     private void intTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-        TabPagerFragmentAdapter fragmentAdapter = new TabPagerFragmentAdapter(getSupportFragmentManager());
+
+        //Привязка tabLayout к viewPager:
+        TabsFragmentAdapter fragmentAdapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
         viewPager.setAdapter(fragmentAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
     private void initNavigationView() {
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        //Кнопка для открытия NavigationView
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
+        drawerLayout.setDrawerListener(toogle);
+        toogle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                drawerLayout.closeDrawers();
+                switch (menuItem.getItemId()){
+                    case R.id.menu_navigation_item_beauty:
+                        showBeautyTab();
+                }
+                return true;
+            }
+        });
+    }
+
+    private void showBeautyTab(){
+        viewPager.setCurrentItem(Constants.TAB_BEAUTY);
     }
 
     private void initFab() {
@@ -85,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class PlaceholderFragment extends Fragment {
+   /* public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -100,5 +125,5 @@ public class MainActivity extends AppCompatActivity {
             return fragment;
         }
 
-    }
+    }*/
 }

@@ -6,4 +6,10 @@
         android:title="@string/menu_item_favourites"
         android:icon="@drawable/ic_star"/>
 
+    <item
+        android:orderInCategory="3"
+        android:id="@+id/menu_navigation_item_beauty"
+        android:title="@string/menu_item_beauty"
+        android:icon="@drawable/ic_heart_pulse"/>
+
 </menu>

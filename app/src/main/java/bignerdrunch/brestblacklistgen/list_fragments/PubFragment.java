@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import bignerdrunch.brestblacklistgen.R;
 
-public class BeautyAndHealthFragment extends AbstractTabFragment {
+public class PubFragment extends AbstractTabFragment {
 
     private static final int LAYOUT = R.layout.fragment_health_and_beauty;
 
@@ -18,7 +18,7 @@ public class BeautyAndHealthFragment extends AbstractTabFragment {
         BeautyAndHealthFragment fragment = new BeautyAndHealthFragment();
         fragment.setArguments(args);
         fragment.setContext(context);
-        fragment.setTitle(context.getString(R.string.tab_item_beauty));
+        fragment.setTitle(context.getString(R.string.tab_item_pub));
 
         return fragment;
     }
@@ -33,5 +33,4 @@ public class BeautyAndHealthFragment extends AbstractTabFragment {
     public void setContext(Context context) {
         this.context = context;
     }
-
 }
