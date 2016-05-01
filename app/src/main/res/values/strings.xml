@@ -1,11 +1,9 @@
 <resources>
-    <string name="app_name">Brest Blacklist Gen</string>
-    <string name="search_title">Search</string>
+    <string name="app_name">Brest Blacklist Beta</string>
+    <string name="search_title">Поиск</string>
 
     <string name="menu_item_favourites">Избранное</string>
     <string name="menu_item_beauty">Красота и Здоровье</string>
-
-    <string name="crime_confirmed">Подтверждено</string>
 
     <string name="view_navigation_open">Open</string>
     <string name="view_navigation_close">Close</string>
@@ -13,9 +11,24 @@
     <string name="tab_item_beauty">Красота и здоровье</string>
     <string name="tab_item_buy">Покупки</string>
     <string name="tab_item_transport">Транспорт</string>
-    <string name="tab_item_pub">Кафе и бары</string>
+    <string name="tab_item_pub">Общепит</string>
     <string name="tab_item_fun">Развлечения</string>
 
+    <string name="new_crime_activity_label">Новый случай</string>
+    <string name="new_crime_title">Заголовок:</string>
+
+    <string name="new_title_hint">Название</string>
+    <string name="new_description_hint">Описание</string>
+    <string name="new_date_hint">Date</string>
+    <string name="new_time_hint">Time</string>
+
+    <string name="error_empty_title">Введите название</string>
+    <string name="error_empty_description">Введите описание</string>
+
+    <string name="description">Описание:</string>
+    <string name="choose_category">Выберите категорию:</string>
+    <string name="cancel_button">Отмена</string>
+    <string name="share_button">Опубликовать</string>
 
 
 </resources>

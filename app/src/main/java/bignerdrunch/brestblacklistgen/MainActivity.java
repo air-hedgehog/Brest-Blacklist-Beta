@@ -1,5 +1,6 @@
 package bignerdrunch.brestblacklistgen;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import bignerdrunch.brestblacklistgen.adapter.TabsFragmentAdapter;
+import bignerdrunch.brestblacklistgen.new_crime.NewCrimeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(LAYOUT);
 
         initToolbar();
-        intTabs();
+        initTabs();
         initNavigationView();
         initFab();
 
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.inflateMenu(R.menu.menu_main);
     }
 
-    private void intTabs() {
+    private void initTabs() {
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -63,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         //Кнопка для открытия NavigationView
-        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
-        drawerLayout.setDrawerListener(toogle);
-        toogle.syncState();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -82,15 +84,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showBeautyTab(){
-        viewPager.setCurrentItem(Constants.TAB_BEAUTY);
+        viewPager.setCurrentItem(Utils.TAB_BEAUTY);
     }
 
     private void initFab() {
-        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab = (FloatingActionButton)findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), NewCrimeActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -109,21 +112,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-   /* public static class PlaceholderFragment extends Fragment {
-
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-    }*/
 }
