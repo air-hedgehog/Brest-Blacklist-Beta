@@ -1,9 +1,9 @@
 package bignerdrunch.brestblacklistgen;
 
-import android.content.Intent;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,13 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import bignerdrunch.brestblacklistgen.adapter.TabsFragmentAdapter;
-import bignerdrunch.brestblacklistgen.new_crime.NewCrimeActivity;
+import bignerdrunch.brestblacklistgen.new_crime.AddingCrimeDialogFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AddingCrimeDialogFragment.AddingCrimeListener {
 
-    private static final int LAYOUT = R.layout.activity_main;
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -26,39 +26,65 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
+    private FragmentManager fragmentManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setContentView(LAYOUT);
+        setContentView(R.layout.activity_main);
 
-        initToolbar();
-        initTabs();
+        fragmentManager = getFragmentManager();
+
         initNavigationView();
-        initFab();
-
+        setUI();
     }
 
-    private void initToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+    private void setUI() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
+            setSupportActionBar(toolbar);
+        }
+
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_beauty));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_buy));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_fun));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_pub));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_transport));
+
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        TabsFragmentAdapter tabAdapter = new TabsFragmentAdapter(fragmentManager, 5);
+
+        viewPager.setAdapter(tabAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
-        toolbar.inflateMenu(R.menu.menu_main);
-    }
 
-    private void initTabs() {
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-
-        //Привязка tabLayout к viewPager:
-        TabsFragmentAdapter fragmentAdapter = new TabsFragmentAdapter(this, getSupportFragmentManager());
-        viewPager.setAdapter(fragmentAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment addingCrimeDialogFragment =  new AddingCrimeDialogFragment();
+                addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");
+            }
+        });
     }
 
     private void initNavigationView() {
@@ -68,34 +94,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                drawerLayout.closeDrawers();
-                switch (menuItem.getItemId()){
-                    case R.id.menu_navigation_item_beauty:
-                        showBeautyTab();
-                }
-                return true;
-            }
-        });
-    }
-
-    private void showBeautyTab(){
-        viewPager.setCurrentItem(Utils.TAB_BEAUTY);
-    }
-
-    private void initFab() {
-        fab = (FloatingActionButton)findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NewCrimeActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -111,5 +109,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCrimeAdded() {
+        Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCrimeAddingCanceled() {
+        Toast.makeText(this, "Crime Adding Canceled", Toast.LENGTH_LONG).show();
     }
 }

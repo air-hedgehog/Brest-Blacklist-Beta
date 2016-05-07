@@ -1,54 +1,44 @@
 package bignerdrunch.brestblacklistgen.adapter;
 
-import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentStatePagerAdapter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import bignerdrunch.brestblacklistgen.list_fragments.AbstractTabFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.BuyFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.FunFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.PubFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.TransportFragment;
 
-public class TabsFragmentAdapter extends FragmentPagerAdapter {
+public class TabsFragmentAdapter extends FragmentStatePagerAdapter {
 
+    private int numberOfTabs;
 
-    private Context context;
-    private Map<Integer, AbstractTabFragment> tabs;
-
-    public TabsFragmentAdapter(Context context, FragmentManager fm) {
+    public TabsFragmentAdapter(FragmentManager fm, int numberOfTabs) {
         super(fm);
-        this.context = context;
-        initTabMap(context);
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        //Получаем value по id табы. В качестве value выступает String
-        return tabs.get(position).getTitle();
+        this.numberOfTabs = numberOfTabs;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return tabs.get(position);
+        switch (position) {
+            case 0:
+                return new BeautyAndHealthFragment();
+            case 1:
+                return new BuyFragment();
+            case 2:
+                return new FunFragment();
+            case 3:
+                return new PubFragment();
+            case 4:
+                return  new TransportFragment();
+            default:
+                return null;
+        }
     }
 
     @Override
     public int getCount() {
-        return tabs.size();
-    }
-
-    private void initTabMap(Context context) {
-        tabs = new HashMap<>();
-        tabs.put(0, BeautyAndHealthFragment.getInstance(context));
-        tabs.put(1, BuyFragment.getInstance(context));
-        tabs.put(2, TransportFragment.getInstance(context));
-        tabs.put(3, PubFragment.getInstance(context));
-        tabs.put(4, FunFragment.getInstance(context));
+        return numberOfTabs;
     }
 }
