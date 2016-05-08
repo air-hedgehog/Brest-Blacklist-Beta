@@ -1,4 +1,4 @@
-package bignerdrunch.brestblacklistgen.new_crime;
+package bignerdrunch.brestblacklistgen.new_crime_dialog;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

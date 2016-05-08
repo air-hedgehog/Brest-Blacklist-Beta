@@ -14,19 +14,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import bignerdrunch.brestblacklistgen.adapter.TabsFragmentAdapter;
-import bignerdrunch.brestblacklistgen.new_crime.AddingCrimeDialogFragment;
+import bignerdrunch.brestblacklistgen.adapter.TabAdapter;
+import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.BuyFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.FunFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.PubFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.TransportFragment;
+import bignerdrunch.brestblacklistgen.model.ModelCrime;
+import bignerdrunch.brestblacklistgen.new_crime_dialog.AddingCrimeDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements AddingCrimeDialogFragment.AddingCrimeListener {
 
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private FloatingActionButton fab;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
 
-    private FragmentManager fragmentManager;
+    FragmentManager fragmentManager;
+    TabAdapter tabAdapter;
+
+    BeautyAndHealthFragment beautyAndHealthFragment;
+    BuyFragment buyFragment;
+    FunFragment funFragment;
+    PubFragment pubFragment;
+    TransportFragment transportFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
     }
 
     private void setUI() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
             setSupportActionBar(toolbar);
@@ -55,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_transport));
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        TabsFragmentAdapter tabAdapter = new TabsFragmentAdapter(fragmentManager, 5);
+        tabAdapter = new TabAdapter(fragmentManager, 5);
 
         viewPager.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -76,6 +86,12 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
 
             }
         });
+
+        beautyAndHealthFragment = (BeautyAndHealthFragment) tabAdapter.getItem(TabAdapter.BEAUTY_AND_HEALTH_FRAGMENT_POSITION);
+        buyFragment = (BuyFragment) tabAdapter.getItem(TabAdapter.BUY_FRAGMENT_POSITION);
+        funFragment = (FunFragment) tabAdapter.getItem(TabAdapter.FUN_FRAGMENT_POSITION);
+        pubFragment = (PubFragment) tabAdapter.getItem(TabAdapter.PUB_FRAGMENT_POSITION);
+        transportFragment = (TransportFragment) tabAdapter.getItem(TabAdapter.TRANSPORT_FRAGMENT_POSITION);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +128,8 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
     }
 
     @Override
-    public void onCrimeAdded() {
+    public void onCrimeAdded(ModelCrime newCrime) {
+        beautyAndHealthFragment.addCrime(newCrime);
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
     }
 

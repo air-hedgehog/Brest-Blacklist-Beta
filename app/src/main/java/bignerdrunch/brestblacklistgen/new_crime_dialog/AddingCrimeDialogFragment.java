@@ -1,4 +1,4 @@
-package bignerdrunch.brestblacklistgen.new_crime;
+package bignerdrunch.brestblacklistgen.new_crime_dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,15 +20,16 @@ import java.util.Calendar;
 
 import bignerdrunch.brestblacklistgen.R;
 import bignerdrunch.brestblacklistgen.Utils;
+import bignerdrunch.brestblacklistgen.model.ModelCrime;
 
 public class AddingCrimeDialogFragment extends DialogFragment {
 
+    private AddingCrimeListener addingCrimeListener;
+
     public interface AddingCrimeListener {
-        void onCrimeAdded();
+        void onCrimeAdded(ModelCrime newCrime);
         void onCrimeAddingCanceled();
     }
-
-    private AddingCrimeListener addingCrimeListener;
 
     @Override
     public void onAttach(Activity activity) {
@@ -36,7 +37,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         try {
             addingCrimeListener = (AddingCrimeListener) activity;
         } catch (ClassCastException e){
-            throw new ClassCastException(activity.toString() + " must implement AddingTaskListener");
+            throw new ClassCastException(activity.toString() + " must implement AddingCrimeListener");
         }
     }
 
@@ -44,12 +45,12 @@ public class AddingCrimeDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.new_crime_dialog_label);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
         View container = inflater.inflate(R.layout.dialog_crime, null);
 
-        builder.setTitle(R.string.new_crime_dialog_label);
 
         final TextInputLayout tilTitle = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTitle);
         final EditText etTitle = tilTitle.getEditText();
@@ -66,6 +67,10 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         builder.setView(container);
 
+        final ModelCrime crime = new ModelCrime();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
+
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,9 +82,11 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                 DialogFragment datePickerFragment = new DatePickerFragment(){
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar dateCalendar = Calendar.getInstance();
-                        dateCalendar.set(year, monthOfYear, dayOfMonth);
-                        etDate.setText(Utils.getDate(dateCalendar.getTimeInMillis()));
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        etDate.setText(Utils.getDate(calendar.getTimeInMillis()));
                     }
 
                     @Override
@@ -101,9 +108,11 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                 DialogFragment timePickerFragment = new TimePickerFragment(){
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
-                        Calendar timeCalendar = Calendar.getInstance();
-                        timeCalendar.set(0, 0, 0, hour, minute);
-                        etTime.setText(Utils.getTime(timeCalendar.getTimeInMillis()));
+                        calendar.set(Calendar.HOUR_OF_DAY, hour);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, 0);
+
+                        etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
                     }
 
                     @Override
@@ -118,7 +127,11 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_OK_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                addingCrimeListener.onCrimeAdded();
+                crime.setTitle(etTitle.getText().toString());
+                if (etDate.length() != 0 || etTime.length() != 0){
+                    crime.setDate(calendar.getTimeInMillis());
+                }
+                addingCrimeListener.onCrimeAdded(crime);
                 dialogInterface.dismiss();
             }
         });
@@ -127,7 +140,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 addingCrimeListener.onCrimeAddingCanceled();
-                dialogInterface.dismiss();
+                dialogInterface.cancel();
             }
         });
 
@@ -149,7 +162,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if (etTitle.length() == 0){
+                        if (charSequence.length() == 0){
                             positiveButton.setEnabled(false);
                             tilTitle.setError(getResources().getString(R.string.error_empty_title));
                         } else {
