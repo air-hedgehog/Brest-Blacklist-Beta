@@ -1,6 +1,5 @@
 package bignerdrunch.brestblacklistgen.list_fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,12 +10,9 @@ import android.view.ViewGroup;
 
 import bignerdrunch.brestblacklistgen.R;
 
-public class BuyFragment extends Fragment {
+public class BuyFragment extends CrimeFragment {
 
     private static final int LAYOUT = R.layout.fragment_buy;
-
-    private RecyclerView rvBuy;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -24,10 +20,10 @@ public class BuyFragment extends Fragment {
 
         View rootView = inflater.inflate(LAYOUT, container, false);
 
-        rvBuy = (RecyclerView) rootView.findViewById(R.id.rvBuy);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvBuy);
 
         layoutManager = new LinearLayoutManager(getActivity());
-        rvBuy.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         return rootView;
     }

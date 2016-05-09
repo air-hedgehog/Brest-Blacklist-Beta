@@ -11,12 +11,9 @@ import android.view.ViewGroup;
 
 import bignerdrunch.brestblacklistgen.R;
 
-public class FunFragment extends Fragment {
+public class FunFragment extends CrimeFragment {
 
     private static final int LAYOUT = R.layout.fragment_fun;
-
-    private RecyclerView rvFun;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Nullable
     @Override
@@ -24,10 +21,10 @@ public class FunFragment extends Fragment {
 
         View rootView = inflater.inflate(LAYOUT, container, false);
 
-        rvFun = (RecyclerView) rootView.findViewById(R.id.rvFun);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rvFun);
         layoutManager = new LinearLayoutManager(getActivity());
 
-        rvFun.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
         return rootView;
     }

@@ -11,9 +11,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -61,13 +64,33 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         TextInputLayout tilTime = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTime);
         final EditText etTime = tilTime.getEditText();
 
+        final ModelCrime crime = new ModelCrime();
+
+        Spinner spPriority = (Spinner) container.findViewById(R.id.spDialogCrime);
+
+        ArrayAdapter<String> priority = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, ModelCrime.PRIORITY_LEVEL);
+
+        spPriority.setAdapter(priority);
+
+        spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                crime.setPriority(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         tilTitle.setHint(getResources().getString(R.string.new_title_hint));
         tilDate.setHint(getResources().getString(R.string.new_date_hint));
         tilTime.setHint(getResources().getString(R.string.new_time_hint));
 
         builder.setView(container);
 
-        final ModelCrime crime = new ModelCrime();
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
 
