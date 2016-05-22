@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -66,22 +69,30 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         final ModelCrime crime = new ModelCrime();
 
-        Spinner spPriority = (Spinner) container.findViewById(R.id.spDialogCrime);
+        final TextView spinnerHint = (TextView) container.findViewById(R.id.hashtag_spinner_hint);
 
-        ArrayAdapter<String> priority = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, ModelCrime.PRIORITY_LEVEL);
+        final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
 
-        spPriority.setAdapter(priority);
+        final Spinner spHashtag = (Spinner) container.findViewById(R.id.spDialogCrime);
 
-        spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        final ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, ModelCrime.HASHTAG_ASSIGNMENT);
+
+        final ModelCrime modelCrime = new ModelCrime();
+
+        spHashtag.setAdapter(hashtagAdapter);
+
+        spHashtag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                crime.setPriority(position);
+
+                if (etTitle.length() != 0){
+                    modelCrime.setHashtag((String) adapterView.getItemAtPosition(position));
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
 
@@ -175,6 +186,8 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                 if (etTitle.length() == 0){
                     positiveButton.setEnabled(false);
                     tilTitle.setError(getResources().getString(R.string.error_empty_title));
+
+                    spHashtag.setEnabled(false);
                 }
 
                 etTitle.addTextChangedListener(new TextWatcher() {
@@ -188,9 +201,12 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                         if (charSequence.length() == 0){
                             positiveButton.setEnabled(false);
                             tilTitle.setError(getResources().getString(R.string.error_empty_title));
+                            spHashtag.setEnabled(false);
                         } else {
                             positiveButton.setEnabled(true);
                             tilTitle.setErrorEnabled(false);
+                            spHashtag.setEnabled(true);
+
                         }
                     }
 

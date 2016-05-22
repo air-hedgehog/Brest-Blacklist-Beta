@@ -9,63 +9,81 @@
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/tilDialogCrimeTitle"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tilDialogCrimeTitle"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:id="@+id/tilDialogCrimeDate">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:inputType="none"
-                android:focusableInTouchMode="false"
-                android:cursorVisible="false"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tilDialogCrimeTitle"
-            android:layout_alignRight="@+id/tilDialogCrimeTitle"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:id="@+id/tilDialogCrimeTime">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:inputType="none"
-                android:focusableInTouchMode="false"
-                android:cursorVisible="false"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spDialogCrime"
-            android:layout_below="@+id/tilDialogCrimeDate"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="16dp">
 
-        </Spinner>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilDialogCrimeDate"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tilDialogCrimeTitle"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilDialogCrimeTime"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/tilDialogCrimeTitle"
+            android:layout_below="@+id/tilDialogCrimeTitle"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:focusableInTouchMode="false"
+                android:inputType="none"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hashtag_spinner_reminder"
+            android:id="@+id/hashtag_spinner_hint"
+            android:layout_below="@+id/tilDialogCrimeDate"
+            android:layout_margin="16dp"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_frame"
+            android:layout_below="@+id/hashtag_spinner_hint"
+            android:background="@color/colorAccent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+
+            <Spinner
+                android:id="@+id/spDialogCrime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:background="@color/colorWhite"/>
+
+        </FrameLayout>
 
     </RelativeLayout>
 

@@ -1,5 +1,6 @@
 package bignerdrunch.brestblacklistgen.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -52,13 +53,13 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         protected TextView title;
         protected TextView date;
-        protected CircleImageView priority;
+        protected CardView cardVew;
 
-        public CrimeViewHolder(View itemView, TextView title, TextView date, CircleImageView priority) {
+        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView) {
             super(itemView);
             this.title = title;
             this.date = date;
-            this.priority = priority;
+            this.cardVew = cardView;
         }
     }
 
