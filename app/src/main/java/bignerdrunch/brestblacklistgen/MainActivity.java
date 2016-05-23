@@ -20,7 +20,7 @@ import bignerdrunch.brestblacklistgen.list_fragments.BuyFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.FunFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.PubFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.TransportFragment;
-import bignerdrunch.brestblacklistgen.model.ModelCrime;
+import bignerdrunch.brestblacklistgen.model.ModelCard;
 import bignerdrunch.brestblacklistgen.new_crime_dialog.AddingCrimeDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements AddingCrimeDialogFragment.AddingCrimeListener {
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
     }
 
     @Override
-    public void onCrimeAdded(ModelCrime newCrime) {
+    public void onCrimeAdded(ModelCard newCrime) {
         beautyAndHealthFragment.addCrime(newCrime);
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
     }

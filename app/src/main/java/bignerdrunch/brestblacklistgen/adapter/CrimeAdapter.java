@@ -54,12 +54,14 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected TextView title;
         protected TextView date;
         protected CardView cardVew;
+        protected TextView hashtag;
 
-        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView) {
+        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView, TextView hashtag) {
             super(itemView);
             this.title = title;
             this.date = date;
             this.cardVew = cardView;
+            this.hashtag = hashtag;
         }
     }
 

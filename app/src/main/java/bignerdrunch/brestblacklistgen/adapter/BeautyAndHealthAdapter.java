@@ -1,6 +1,5 @@
 package bignerdrunch.brestblacklistgen.adapter;
 
-import android.content.res.Resources;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +11,7 @@ import bignerdrunch.brestblacklistgen.R;
 import bignerdrunch.brestblacklistgen.Utils;
 import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
 import bignerdrunch.brestblacklistgen.model.Item;
-import bignerdrunch.brestblacklistgen.model.ModelCrime;
+import bignerdrunch.brestblacklistgen.model.ModelCard;
 
 public class BeautyAndHealthAdapter extends CrimeAdapter {
 
@@ -28,8 +27,9 @@ public class BeautyAndHealthAdapter extends CrimeAdapter {
         TextView title = (TextView) v.findViewById(R.id.tvCrimeTitle);
         TextView date = (TextView) v.findViewById(R.id.tvCrimeDate);
         CardView cardView = (CardView) v.findViewById(R.id.cardView);
+        TextView hashtag = (TextView) v.findViewById(R.id.test_hashtag_assignment);
 
-        return new CrimeViewHolder(v, title, date, cardView);
+        return new CrimeViewHolder(v, title, date, cardView, hashtag);
     }
 
     @Override
@@ -37,10 +37,12 @@ public class BeautyAndHealthAdapter extends CrimeAdapter {
         Item item = items.get(position);
 
         viewHolder.itemView.setEnabled(true);
-        ModelCrime crime = (ModelCrime) item;
+        ModelCard crime = (ModelCard) item;
         CrimeViewHolder crimeViewHolder = (CrimeViewHolder) viewHolder;
 
         crimeViewHolder.title.setText(crime.getTitle());
+
+        crimeViewHolder.hashtag.setText(crime.getHashtag());
 
         if (crime.getDate() != 0) {
             crimeViewHolder.date.setText(Utils.getFullDate(crime.getDate()));

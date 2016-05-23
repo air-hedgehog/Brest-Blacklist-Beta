@@ -14,11 +14,11 @@
     <string name="tab_item_pub">Public catering</string>
     <string name="tab_item_fun">Entertainment</string>
 
-    <string name="hashtag_beauty">#Beauty_and_health\n\n</string>
-    <string name="hashtag_buy">#Purchases\n\n</string>
-    <string name="hashtag_transport">#Transport\n\n</string>
-    <string name="hashtag_pub">#Public catering\n\n</string>
-    <string name="hashtag_fun">#Entertainment\n\n</string>
+    <string name="hashtag_beauty">#Beauty_and_health</string>
+    <string name="hashtag_buy">#Purchases</string>
+    <string name="hashtag_transport">#Transport</string>
+    <string name="hashtag_pub">#Public catering</string>
+    <string name="hashtag_fun">#Entertainment</string>
 
     <string name="new_crime_dialog_label">New Crime</string>
     <string name="new_crime_title">Title:</string>

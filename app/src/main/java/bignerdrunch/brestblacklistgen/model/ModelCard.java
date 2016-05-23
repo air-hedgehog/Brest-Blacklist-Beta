@@ -1,19 +1,16 @@
 package bignerdrunch.brestblacklistgen.model;
 
-public class ModelCrime implements Item{
-
-    public static final String[] HASHTAG_ASSIGNMENT = {"#Beauty_and_Health", "#Purchases", "#Entertainment",
-    "#Public_Catering", "#Transport"};
+public class ModelCard implements Item{
 
     private String title;
     private long date;
     private String hashtag;
 
-    public ModelCrime(){
+    public ModelCard(){
 
     }
 
-    public ModelCrime(String title, long date, String hashtag){
+    public ModelCard(String title, long date, String hashtag){
         this.title = title;
         this.date = date;
         this.hashtag = hashtag;

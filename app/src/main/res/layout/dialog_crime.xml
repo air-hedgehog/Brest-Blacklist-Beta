@@ -72,9 +72,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinner_frame"
             android:layout_below="@+id/hashtag_spinner_hint"
-            android:background="@color/colorAccent"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp">
 
             <Spinner
                 android:id="@+id/spDialogCrime"

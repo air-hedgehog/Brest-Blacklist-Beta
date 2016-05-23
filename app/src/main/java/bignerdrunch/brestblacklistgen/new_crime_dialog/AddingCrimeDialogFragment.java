@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,18 +21,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import bignerdrunch.brestblacklistgen.R;
 import bignerdrunch.brestblacklistgen.Utils;
-import bignerdrunch.brestblacklistgen.model.ModelCrime;
+import bignerdrunch.brestblacklistgen.model.ModelCard;
 
 public class AddingCrimeDialogFragment extends DialogFragment {
 
     private AddingCrimeListener addingCrimeListener;
 
     public interface AddingCrimeListener {
-        void onCrimeAdded(ModelCrime newCrime);
+        void onCrimeAdded(ModelCard newCrime);
+
         void onCrimeAddingCanceled();
     }
 
@@ -42,9 +44,13 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         super.onAttach(activity);
         try {
             addingCrimeListener = (AddingCrimeListener) activity;
-        } catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement AddingCrimeListener");
         }
+    }
+
+    public void addItemsOnSpinner() {
+
     }
 
     @Override
@@ -67,32 +73,38 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         TextInputLayout tilTime = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTime);
         final EditText etTime = tilTime.getEditText();
 
-        final ModelCrime crime = new ModelCrime();
+        final ModelCard crime = new ModelCard();
 
         final TextView spinnerHint = (TextView) container.findViewById(R.id.hashtag_spinner_hint);
-
         final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
 
+        String hashTagBeauty = getResources().getString(R.string.hashtag_beauty);
+        String hashTagBuy = getResources().getString(R.string.hashtag_buy);
+        String hashTagFun = getResources().getString(R.string.hashtag_fun);
+        String hashTagPub = getResources().getString(R.string.hashtag_pub);
+        String hashTagTransport = getResources().getString(R.string.hashtag_transport);
+
         final Spinner spHashtag = (Spinner) container.findViewById(R.id.spDialogCrime);
+        List<String> hashtagAssignment = new ArrayList<String>();
+        hashtagAssignment.add(hashTagBeauty);
+        hashtagAssignment.add(hashTagBuy);
+        hashtagAssignment.add(hashTagFun);
+        hashtagAssignment.add(hashTagPub);
+        hashtagAssignment.add(hashTagTransport);
 
-        final ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_dropdown_item, ModelCrime.HASHTAG_ASSIGNMENT);
-
-        final ModelCrime modelCrime = new ModelCrime();
+        ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, hashtagAssignment);
 
         spHashtag.setAdapter(hashtagAdapter);
-
         spHashtag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-
-                if (etTitle.length() != 0){
-                    modelCrime.setHashtag((String) adapterView.getItemAtPosition(position));
-                }
+                crime.setHashtag((String) adapterView.getItemAtPosition(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                crime.setHashtag((String) adapterView.getItemAtPosition(1));
             }
         });
 
@@ -109,11 +121,11 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
 
-                if (etDate.length() == 0){
+                if (etDate.length() == 0) {
                     etDate.setText(" ");
                 }
 
-                DialogFragment datePickerFragment = new DatePickerFragment(){
+                DialogFragment datePickerFragment = new DatePickerFragment() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(Calendar.YEAR, year);
@@ -135,11 +147,11 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etTime.length() == 0){
+                if (etTime.length() == 0) {
                     etTime.setText(" ");
                 }
 
-                DialogFragment timePickerFragment = new TimePickerFragment(){
+                DialogFragment timePickerFragment = new TimePickerFragment() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -162,10 +174,12 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 crime.setTitle(etTitle.getText().toString());
-                if (etDate.length() != 0 || etTime.length() != 0){
+
+                if (etDate.length() != 0 || etTime.length() != 0) {
                     crime.setDate(calendar.getTimeInMillis());
                 }
                 addingCrimeListener.onCrimeAdded(crime);
+
                 dialogInterface.dismiss();
             }
         });
@@ -183,10 +197,10 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 final Button positiveButton = ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE);
-                if (etTitle.length() == 0){
+                if (etTitle.length() == 0) {
                     positiveButton.setEnabled(false);
                     tilTitle.setError(getResources().getString(R.string.error_empty_title));
-
+                    spinnerHint.setVisibility(View.INVISIBLE);
                     spHashtag.setEnabled(false);
                 }
 
@@ -198,14 +212,18 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if (charSequence.length() == 0){
+                        if (charSequence.length() == 0) {
                             positiveButton.setEnabled(false);
                             tilTitle.setError(getResources().getString(R.string.error_empty_title));
                             spHashtag.setEnabled(false);
+                            spinnerHint.setVisibility(View.INVISIBLE);
+                            spinnerFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
                         } else {
                             positiveButton.setEnabled(true);
                             tilTitle.setErrorEnabled(false);
                             spHashtag.setEnabled(true);
+                            spinnerHint.setVisibility(View.VISIBLE);
+                            spinnerFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
                         }
                     }
