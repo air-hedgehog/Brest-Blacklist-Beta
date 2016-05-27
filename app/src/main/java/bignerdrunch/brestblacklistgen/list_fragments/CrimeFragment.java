@@ -1,34 +1,28 @@
 package bignerdrunch.brestblacklistgen.list_fragments;
 
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 
-import bignerdrunch.brestblacklistgen.adapter.BeautyAndHealthAdapter;
-import bignerdrunch.brestblacklistgen.model.ModelCard;
+import bignerdrunch.brestblacklistgen.MainActivity;
+import bignerdrunch.brestblacklistgen.adapter.CrimeAdapter;
 
 public abstract class CrimeFragment extends Fragment {
-
-    protected BeautyAndHealthAdapter adapter;
 
     protected RecyclerView recyclerView;
     protected RecyclerView.LayoutManager layoutManager;
 
-    public void addCrime(ModelCard newCrime) {
-        int position = -1;
+    protected CrimeAdapter adapter;
+    public MainActivity activity;
 
-        for (int i = 0; i < adapter.getItemCount(); i++) {
+    public abstract void checkAdapter();
 
-            ModelCard crime = (ModelCard) adapter.getItem(i);
-            if (newCrime.getDate() > crime.getDate()) {
-                position = i;
-                break;
-            }
-        }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
-        if (position != -1) {
-            adapter.addItem(position, newCrime);
-        } else {
-            adapter.addItem(newCrime);
+        if (getActivity() != null){
+            activity = (MainActivity) getActivity();
         }
     }
 }

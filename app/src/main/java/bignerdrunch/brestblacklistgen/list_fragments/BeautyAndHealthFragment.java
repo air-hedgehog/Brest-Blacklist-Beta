@@ -9,14 +9,19 @@ import android.view.ViewGroup;
 
 import bignerdrunch.brestblacklistgen.R;
 import bignerdrunch.brestblacklistgen.adapter.BeautyAndHealthAdapter;
+import bignerdrunch.brestblacklistgen.model.ModelCard;
 
 public class BeautyAndHealthFragment extends CrimeFragment {
+
+    private BeautyAndHealthAdapter beautyAndHealthAdapter;
 
     private static final int LAYOUT = R.layout.fragment_health_and_beauty;
 
     public BeautyAndHealthFragment(){
 
     }
+
+    private ModelCard modelCard;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,10 +32,36 @@ public class BeautyAndHealthFragment extends CrimeFragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new BeautyAndHealthAdapter(this);
-        recyclerView.setAdapter(adapter);
+        beautyAndHealthAdapter = new BeautyAndHealthAdapter(this);
+        recyclerView.setAdapter(beautyAndHealthAdapter);
 
         return rootView;
     }
 
+    public void addCrime(ModelCard modelCard) {
+
+        int position = -1;
+
+        for (int i = 0; i < beautyAndHealthAdapter.getItemCount(); i++) {
+
+            ModelCard crime = (ModelCard) beautyAndHealthAdapter.getItem(i);
+            if (modelCard.getDate() > crime.getDate()) {
+                position = i;
+                break;
+            }
+        }
+
+        if (position != -1) {
+            beautyAndHealthAdapter.addItem(position, modelCard);
+        } else {
+            beautyAndHealthAdapter.addItem(modelCard);
+        }
+    }
+
+    @Override
+    public void checkAdapter() {
+        if (adapter == null){
+            adapter = new BeautyAndHealthAdapter(this);
+        }
+    }
 }

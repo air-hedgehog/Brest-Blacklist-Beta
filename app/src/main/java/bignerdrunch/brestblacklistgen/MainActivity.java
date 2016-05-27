@@ -1,7 +1,9 @@
 package bignerdrunch.brestblacklistgen;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -14,9 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import bignerdrunch.brestblacklistgen.adapter.BeautyAndHealthAdapter;
+import bignerdrunch.brestblacklistgen.adapter.CrimeAdapter;
 import bignerdrunch.brestblacklistgen.adapter.TabAdapter;
 import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.BuyFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.CrimeFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.FunFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.PubFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.TransportFragment;
@@ -29,14 +34,16 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
 
-    FragmentManager fragmentManager;
-    TabAdapter tabAdapter;
+    private FragmentManager fragmentManager;
+    private TabAdapter tabAdapter;
 
-    BeautyAndHealthFragment beautyAndHealthFragment;
-    BuyFragment buyFragment;
-    FunFragment funFragment;
-    PubFragment pubFragment;
-    TransportFragment transportFragment;
+    private CrimeFragment crimeFragment;
+
+    private BeautyAndHealthFragment beautyAndHealthFragment;
+    private BuyFragment buyFragment;
+    private FunFragment funFragment;
+    private PubFragment pubFragment;
+    private TransportFragment transportFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
             setSupportActionBar(toolbar);
         }
 
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_beauty));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_buy));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_fun));
@@ -97,14 +104,14 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment addingCrimeDialogFragment =  new AddingCrimeDialogFragment();
+                DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
                 addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");
             }
         });
     }
 
     private void initNavigationView() {
-        drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //Кнопка для открытия NavigationView
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
@@ -129,7 +136,19 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
 
     @Override
     public void onCrimeAdded(ModelCard newCrime) {
-        beautyAndHealthFragment.addCrime(newCrime);
+
+        if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_beauty))){
+            beautyAndHealthFragment.addCrime(newCrime);
+        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_buy))){
+            buyFragment.addCrime(newCrime);
+        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_fun))){
+            funFragment.addCrime(newCrime);
+        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_pub))){
+            pubFragment.addCrime(newCrime);
+        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_transport))){
+            transportFragment.addCrime(newCrime);
+        }
+
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
     }
 

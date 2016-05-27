@@ -9,14 +9,14 @@ import android.widget.TextView;
 
 import bignerdrunch.brestblacklistgen.R;
 import bignerdrunch.brestblacklistgen.Utils;
-import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
+import bignerdrunch.brestblacklistgen.list_fragments.FunFragment;
 import bignerdrunch.brestblacklistgen.model.Item;
 import bignerdrunch.brestblacklistgen.model.ModelCard;
 
-public class BeautyAndHealthAdapter extends CrimeAdapter {
+public class FunAdapter extends CrimeAdapter{
 
-    public BeautyAndHealthAdapter(BeautyAndHealthFragment beautyAndHealthFragment) {
-        super(beautyAndHealthFragment);
+    public FunAdapter (FunFragment funFragment) {
+        super(funFragment);
     }
 
 

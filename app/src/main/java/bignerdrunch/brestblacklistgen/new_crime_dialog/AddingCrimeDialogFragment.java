@@ -49,10 +49,6 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         }
     }
 
-    public void addItemsOnSpinner() {
-
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
