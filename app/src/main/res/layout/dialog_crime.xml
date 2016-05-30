@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:src="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/tilDialogCrimeTitle"
@@ -62,7 +64,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/hashtag_spinner_reminder"
+            android:text="@string/dialog_hashtag_spinner_hint"
             android:id="@+id/hashtag_spinner_hint"
             android:layout_below="@+id/tilDialogCrimeDate"
             android:layout_margin="16dp"/>
@@ -73,8 +75,7 @@
             android:id="@+id/spinner_frame"
             android:layout_below="@+id/hashtag_spinner_hint"
             android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp">
+            android:layout_marginRight="16dp">
 
             <Spinner
                 android:id="@+id/spDialogCrime"
@@ -84,6 +85,77 @@
                 android:background="@color/colorWhite"/>
 
         </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinner_frame"
+            android:id="@+id/buttons_layout">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/take_picture_button"
+                android:text="@string/dialog_take_a_picture_button"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorWhite"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/take_picture_icon"
+                android:background="@color/colorWhite"
+                android:layout_toRightOf="@+id/take_picture_button"
+                android:layout_alignBottom="@+id/take_picture_button"
+                android:layout_alignTop="@+id/take_picture_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:clickable="false"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/set_location_button"
+                android:text="@string/dialog_set_location"
+                android:layout_below="@+id/take_picture_button"
+                android:background="@color/colorWhite"
+                android:layout_toLeftOf="@+id/take_picture_icon"
+                android:layout_alignLeft="@+id/take_picture_button"
+                android:layout_alignStart="@+id/take_picture_button"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:id="@+id/remove_location_button"
+                android:text="@string/dialog_remove_location"
+                android:layout_below="@+id/set_location_button"
+                android:background="@color/colorWhite"
+                android:textColor="@color/colorPrimaryDark"
+                style="?android:attr/borderlessButtonStyle"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/set_location_icon"
+                android:background="@color/colorWhite"
+                android:layout_toRightOf="@+id/take_picture_button"
+                android:layout_toEndOf="@+id/take_picture_button"
+                android:layout_alignBottom="@+id/set_location_button"
+                android:layout_alignTop="@+id/set_location_button"
+                style="?android:attr/borderlessButtonStyle"
+                android:clickable="false"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/buttons_layout"
+            android:scaleType="centerCrop"
+            android:id="@+id/taken_picture"/>
 
     </RelativeLayout>
 

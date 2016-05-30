@@ -40,8 +40,4 @@ public class ModelCard implements Item{
         this.hashtag = hashtag;
     }
 
-    @Override
-    public boolean isCrime() {
-        return true;
-    }
 }

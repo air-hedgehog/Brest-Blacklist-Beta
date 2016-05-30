@@ -5,7 +5,12 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,12 +22,17 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import bignerdrunch.brestblacklistgen.R;
@@ -32,6 +42,17 @@ import bignerdrunch.brestblacklistgen.model.ModelCard;
 public class AddingCrimeDialogFragment extends DialogFragment {
 
     private AddingCrimeListener addingCrimeListener;
+
+    public ModelCard modelCard = new ModelCard();
+
+
+    private static final int CAMERA_REQUEST = 10;
+
+    private EditText etTitle;
+    private EditText etDate;
+    private EditText etTime;
+    private String choosenHashtag;
+    ImageView takenPicture;
 
     public interface AddingCrimeListener {
         void onCrimeAdded(ModelCard newCrime);
@@ -50,7 +71,22 @@ public class AddingCrimeDialogFragment extends DialogFragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == CAMERA_REQUEST) {
+                //Bitmap cameraImage = (Bitmap) data.getExtras().get("data");
+                //takenPicture.setImageBitmap(cameraImage);
+            }
+        }
+
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        super.onCreateDialog(savedInstanceState);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.new_crime_dialog_label);
@@ -61,18 +97,23 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
 
         final TextInputLayout tilTitle = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTitle);
-        final EditText etTitle = tilTitle.getEditText();
+        etTitle = tilTitle.getEditText();
 
         TextInputLayout tilDate = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeDate);
-        final EditText etDate = tilDate.getEditText();
+        etDate = tilDate.getEditText();
 
         TextInputLayout tilTime = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTime);
-        final EditText etTime = tilTime.getEditText();
+        etTime = tilTime.getEditText();
 
-        final ModelCard crime = new ModelCard();
 
         final TextView spinnerHint = (TextView) container.findViewById(R.id.hashtag_spinner_hint);
         final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
+
+        final Button takePictureButton = (Button) container.findViewById(R.id.take_picture_button);
+        final Button setLocationButton = (Button) container.findViewById(R.id.set_location_button);
+        final Button removeLocationButton = (Button) container.findViewById(R.id.remove_location_button);
+        final ImageButton photoIcon = (ImageButton) container.findViewById(R.id.take_picture_icon);
+        ImageButton locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
 
         String hashTagBeauty = getResources().getString(R.string.hashtag_beauty);
         String hashTagBuy = getResources().getString(R.string.hashtag_buy);
@@ -88,19 +129,26 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         hashtagAssignment.add(hashTagPub);
         hashtagAssignment.add(hashTagTransport);
 
+        takenPicture = (ImageView) container.findViewById(R.id.taken_picture);
+
         ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, hashtagAssignment);
+
+        if (savedInstanceState != null) {
+            etTitle.setText(savedInstanceState.getString("title"));
+
+        }
 
         spHashtag.setAdapter(hashtagAdapter);
         spHashtag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                crime.setHashtag((String) adapterView.getItemAtPosition(position));
+                modelCard.setHashtag((String) adapterView.getItemAtPosition(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                crime.setHashtag((String) adapterView.getItemAtPosition(1));
+                modelCard.setHashtag((String) adapterView.getItemAtPosition(1));
             }
         });
 
@@ -155,6 +203,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                         calendar.set(Calendar.SECOND, 0);
 
                         etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
+
                     }
 
                     @Override
@@ -166,15 +215,33 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             }
         });
 
+        takePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                String pictureName = getPictureName();
+                File imageFile = new File(pictureDirectory, pictureName);
+                Uri pictureUri = Uri.fromFile(imageFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+        });
+
+
         builder.setPositiveButton(R.string.dialog_OK_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                crime.setTitle(etTitle.getText().toString());
+                modelCard.setTitle(etTitle.getText().toString());
 
                 if (etDate.length() != 0 || etTime.length() != 0) {
-                    crime.setDate(calendar.getTimeInMillis());
+                    modelCard.setDate(calendar.getTimeInMillis());
+                } else {
+                    modelCard.setDate(Calendar.getInstance().getTimeInMillis());
                 }
-                addingCrimeListener.onCrimeAdded(crime);
+                addingCrimeListener.onCrimeAdded(modelCard);
 
                 dialogInterface.dismiss();
             }
@@ -195,9 +262,18 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                 final Button positiveButton = ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE);
                 if (etTitle.length() == 0) {
                     positiveButton.setEnabled(false);
-                    tilTitle.setError(getResources().getString(R.string.error_empty_title));
+                    tilTitle.setError(getResources().getString(R.string.dialog_error_empty_title));
                     spinnerHint.setVisibility(View.INVISIBLE);
                     spHashtag.setEnabled(false);
+
+                    takePictureButton.setEnabled(false);
+                    takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
+
+
+                    setLocationButton.setEnabled(false);
+                    setLocationButton.setTextColor(getResources().getColor(R.color.gray_200));
+
+                    removeLocationButton.setEnabled(false);
                 }
 
                 etTitle.addTextChangedListener(new TextWatcher() {
@@ -210,14 +286,24 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                         if (charSequence.length() == 0) {
                             positiveButton.setEnabled(false);
-                            tilTitle.setError(getResources().getString(R.string.error_empty_title));
+                            tilTitle.setError(getResources().getString(R.string.dialog_error_empty_title));
                             spHashtag.setEnabled(false);
+                            takePictureButton.setEnabled(false);
+                            takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
+                            setLocationButton.setEnabled(false);
+                            setLocationButton.setTextColor(getResources().getColor(R.color.gray_200));
+                            removeLocationButton.setEnabled(false);
                             spinnerHint.setVisibility(View.INVISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
                         } else {
                             positiveButton.setEnabled(true);
                             tilTitle.setErrorEnabled(false);
                             spHashtag.setEnabled(true);
+                            takePictureButton.setEnabled(true);
+                            takePictureButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                            setLocationButton.setEnabled(true);
+                            setLocationButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                            removeLocationButton.setEnabled(true);
                             spinnerHint.setVisibility(View.VISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
@@ -233,5 +319,19 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         });
 
         return alertDialog;
+    }
+
+    private String getPictureName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String timestamp = sdf.format(new Date());
+        return "Brest Blacklist Image " + timestamp + ".jpg";
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putString("title", etTitle.getText().toString());
+
+        super.onSaveInstanceState(outState);
     }
 }
