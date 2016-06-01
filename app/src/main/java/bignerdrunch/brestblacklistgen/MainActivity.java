@@ -1,9 +1,11 @@
 package bignerdrunch.brestblacklistgen;
 
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.res.Resources;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -16,8 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import bignerdrunch.brestblacklistgen.adapter.BeautyAndHealthAdapter;
-import bignerdrunch.brestblacklistgen.adapter.CrimeAdapter;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import bignerdrunch.brestblacklistgen.adapter.TabAdapter;
 import bignerdrunch.brestblacklistgen.list_fragments.BeautyAndHealthFragment;
 import bignerdrunch.brestblacklistgen.list_fragments.BuyFragment;
@@ -38,12 +41,15 @@ public class MainActivity extends AppCompatActivity implements AddingCrimeDialog
     private TabAdapter tabAdapter;
 
     private CrimeFragment crimeFragment;
+    private ModelCard modelCard;
 
     private BeautyAndHealthFragment beautyAndHealthFragment;
     private BuyFragment buyFragment;
     private FunFragment funFragment;
     private PubFragment pubFragment;
     private TransportFragment transportFragment;
+
+    private static final int IMAGE_GALLERY_REQUEST = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

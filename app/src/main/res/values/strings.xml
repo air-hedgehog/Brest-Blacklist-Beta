@@ -36,5 +36,8 @@
     <string name="dialog_remove_picture">Remove Picture</string>
     <string name="dialog_set_location">Set location</string>
     <string name="dialog_remove_location">Remove location</string>
+    <string name="dialog_toast_image_added">Image added</string>
+    <string name="dialog_toast_location_added">Location added</string>
+    <string name="dialog_toast_location_removed">Location removed</string>
 
 </resources>

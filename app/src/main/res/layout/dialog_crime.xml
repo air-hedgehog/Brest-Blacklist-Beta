@@ -86,76 +86,95 @@
 
         </FrameLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinner_frame"
-            android:id="@+id/buttons_layout">
+            android:id="@+id/buttons_layout"
+            android:orientation="horizontal">
 
-            <Button
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/take_picture_button"
-                android:text="@string/dialog_take_a_picture_button"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/colorWhite"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:id="@+id/take_picture_button_frame"
+                android:layout_weight="1">
 
-            <ImageButton
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/take_picture_button"
+                    android:text="@string/dialog_take_a_picture_button"
+                    android:background="@color/colorWhite"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginBottom="1dp"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/take_picture_icon"
+                    android:background="@color/colorWhite"
+                    android:layout_toRightOf="@+id/take_picture_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:clickable="false"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginBottom="1dp"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/take_picture_icon"
-                android:background="@color/colorWhite"
-                android:layout_toRightOf="@+id/take_picture_button"
-                android:layout_alignBottom="@+id/take_picture_button"
-                android:layout_alignTop="@+id/take_picture_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:clickable="false"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/set_location_button"
-                android:text="@string/dialog_set_location"
-                android:layout_below="@+id/take_picture_button"
-                android:background="@color/colorWhite"
-                android:layout_toLeftOf="@+id/take_picture_icon"
-                android:layout_alignLeft="@+id/take_picture_button"
-                android:layout_alignStart="@+id/take_picture_button"
-                style="?android:attr/borderlessButtonStyle"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/set_location_button_frame"
+                android:layout_below="@+id/take_picture_button_frame"
                 android:layout_marginLeft="16dp"
-                android:id="@+id/remove_location_button"
-                android:text="@string/dialog_remove_location"
-                android:layout_below="@+id/set_location_button"
-                android:background="@color/colorWhite"
-                android:textColor="@color/colorPrimaryDark"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1">
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/set_location_icon"
-                android:background="@color/colorWhite"
-                android:layout_toRightOf="@+id/take_picture_button"
-                android:layout_toEndOf="@+id/take_picture_button"
-                android:layout_alignBottom="@+id/set_location_button"
-                android:layout_alignTop="@+id/set_location_button"
-                style="?android:attr/borderlessButtonStyle"
-                android:clickable="false"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/set_location_button"
+                    android:text="@string/dialog_set_location"
+                    android:background="@color/colorWhite"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginBottom="1dp"/>
 
-        </RelativeLayout>
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/set_location_icon"
+                    android:background="@color/colorWhite"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:clickable="false"
+                    android:layout_toRightOf="@+id/set_location_button"
+                    android:layout_toEndOf="@+id/set_location_button"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="1dp"
+                    android:layout_marginBottom="1dp"/>
 
-        <ImageView
-            android:layout_width="match_parent"
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/remove_location_button"
+            android:text="@string/dialog_remove_location"
             android:layout_below="@+id/buttons_layout"
-            android:scaleType="centerCrop"
-            android:id="@+id/taken_picture"/>
+            android:background="@color/colorWhite"
+            android:textColor="@color/colorPrimaryDark"
+            style="?android:attr/borderlessButtonStyle"/>
 
     </RelativeLayout>
 

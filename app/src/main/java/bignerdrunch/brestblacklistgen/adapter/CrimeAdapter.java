@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -59,13 +60,15 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected TextView date;
         protected CardView cardVew;
         protected TextView hashtag;
+        protected ImageView photoCard;
 
-        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView, TextView hashtag) {
+        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView, TextView hashtag, ImageView photoCard) {
             super(itemView);
             this.title = title;
             this.date = date;
             this.cardVew = cardView;
             this.hashtag = hashtag;
+            this.photoCard = photoCard;
         }
     }
 
@@ -73,13 +76,14 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.model_crime, parent, false);
+                .inflate(R.layout.model_card, parent, false);
         TextView title = (TextView) v.findViewById(R.id.tvCrimeTitle);
         TextView date = (TextView) v.findViewById(R.id.tvCrimeDate);
         CardView cardView = (CardView) v.findViewById(R.id.cardView);
         TextView hashtag = (TextView) v.findViewById(R.id.test_hashtag_assignment);
+        ImageView photoCard = (ImageView) v.findViewById(R.id.card_image_view);
 
-        return new CrimeViewHolder(v, title, date, cardView, hashtag);
+        return new CrimeViewHolder(v, title, date, cardView, hashtag, photoCard);
     }
 
     @Override
@@ -87,17 +91,21 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         Item item = items.get(position);
 
         holder.itemView.setEnabled(true);
-        ModelCard crime = (ModelCard) item;
+        ModelCard modelCard = (ModelCard) item;
         CrimeViewHolder crimeViewHolder = (CrimeViewHolder) holder;
 
-        crimeViewHolder.title.setText(crime.getTitle());
+        crimeViewHolder.title.setText(modelCard.getTitle());
 
-        crimeViewHolder.hashtag.setText(crime.getHashtag());
+        crimeViewHolder.hashtag.setText(modelCard.getHashtag());
 
-        if (crime.getDate() != 0) {
-            crimeViewHolder.date.setText(Utils.getFullDate(crime.getDate()));
+        if (modelCard.getDate() != 0) {
+            crimeViewHolder.date.setText(Utils.getFullDate(modelCard.getDate()));
         } else {
             crimeViewHolder.date.setText(null);
+        }
+
+        if (modelCard.getPicturePath() != null){
+            crimeViewHolder.photoCard.setImageBitmap(modelCard.getImageBitmap());
         }
     }
 
