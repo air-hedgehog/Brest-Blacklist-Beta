@@ -1,26 +1,27 @@
 package com.pain.fleetin.brestblacklist.model;
 
-import android.graphics.Bitmap;
-import android.net.Uri;
+import java.util.Date;
 
 public class ModelCard implements Item{
 
     private String title;
     private long date;
     private String hashtag;
-    private Uri picturePath;
-    private Bitmap imageBitmap;
+    //private Uri pictureUri;
+    //private Bitmap imageBitmap;
+    private long timestamp;
 
     public ModelCard(){
-
+        this.timestamp = new Date().getTime();
     }
 
-    public ModelCard(String title, long date, String hashtag, Uri picturePath, Bitmap imageBitmap){
+    public ModelCard(String title, long date, String hashtag, /*Uri pictureUri, Bitmap imageBitmap,*/ long timestamp){
         this.title = title;
         this.date = date;
         this.hashtag = hashtag;
-        this.picturePath = picturePath;
-        this.imageBitmap = imageBitmap;
+        //this.pictureUri = pictureUri;
+        //this.imageBitmap = imageBitmap;
+        this.timestamp = timestamp;
     }
 
     public String getTitle() {
@@ -47,19 +48,28 @@ public class ModelCard implements Item{
         this.hashtag = hashtag;
     }
 
-    public Uri getPicturePath() {
-        return picturePath;
+    /*public Uri getPictureUri() {
+        return pictureUri;
     }
 
-    public void setPicturePath(Uri picturePath) {
-        this.picturePath = picturePath;
-    }
+    public void setPictureUri(Uri pictureUri) {
+        this.pictureUri = pictureUri;
+    }*/
 
-    public Bitmap getImageBitmap() {
+    /*public Bitmap getImageBitmap() {
         return imageBitmap;
     }
 
     public void setImageBitmap(Bitmap imageBitmap) {
         this.imageBitmap = imageBitmap;
     }
+*/
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
 }

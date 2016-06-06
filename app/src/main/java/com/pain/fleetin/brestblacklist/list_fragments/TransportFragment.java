@@ -9,11 +9,17 @@ import android.view.ViewGroup;
 
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.adapter.TransportAdapter;
+import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransportFragment extends CrimeFragment {
 
     private TransportAdapter transportAdapter;
+
+    private DBHelper dbHelper;
 
     public TransportFragment(){
 
@@ -37,10 +43,9 @@ public class TransportFragment extends CrimeFragment {
         return rootView;
     }
 
-    public void addCrime(ModelCard modelCard) {
-
+    public void addCrime(ModelCard modelCard, boolean saveToDB) {
         int position = -1;
-
+        checkAdapter();
         for (int i = 0; i < transportAdapter.getItemCount(); i++) {
 
             ModelCard crime = (ModelCard) transportAdapter.getItem(i);
@@ -55,12 +60,28 @@ public class TransportFragment extends CrimeFragment {
         } else {
             transportAdapter.addItem(modelCard);
         }
+
+        if (saveToDB){
+            activity.dbHelper.saveCrime(modelCard);
+        }
     }
 
     @Override
     public void checkAdapter() {
         if (adapter != null){
             adapter = new TransportAdapter(this);
+        }
+    }
+
+    @Override
+    public void addCrimeFromDB() {
+        checkAdapter();
+        List<ModelCard> crimes = new ArrayList<>();
+        crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_HASHTAG,
+                new String[]{hashtag_transport}, DBHelper.CRIME_DATE_COLUMN));
+
+        for (int i = 0; i < crimes.size(); i++){
+            addCrime(crimes.get(i), false);
         }
     }
 }

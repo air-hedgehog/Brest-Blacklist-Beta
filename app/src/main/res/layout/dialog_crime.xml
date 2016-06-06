@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:src="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -98,8 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:id="@+id/take_picture_button_frame"
-                android:layout_weight="1">
+                android:id="@+id/take_picture_button_frame">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -116,7 +114,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/take_picture_icon"
-                    android:background="@color/colorWhite"
                     android:layout_toRightOf="@+id/take_picture_button"
                     style="?android:attr/borderlessButtonStyle"
                     android:clickable="false"
@@ -133,8 +130,7 @@
                 android:layout_below="@+id/take_picture_button_frame"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginRight="16dp"
-                android:layout_weight="1">
+                android:layout_marginRight="16dp">
 
                 <Button
                     android:layout_width="wrap_content"
@@ -151,11 +147,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/set_location_icon"
-                    android:background="@color/colorWhite"
                     style="?android:attr/borderlessButtonStyle"
                     android:clickable="false"
                     android:layout_toRightOf="@+id/set_location_button"
-                    android:layout_toEndOf="@+id/set_location_button"
                     android:layout_marginTop="1dp"
                     android:layout_marginRight="1dp"
                     android:layout_marginBottom="1dp"/>

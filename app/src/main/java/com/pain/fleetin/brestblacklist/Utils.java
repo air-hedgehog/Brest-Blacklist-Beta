@@ -18,4 +18,5 @@ public class Utils {
         SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd.MM.yy  HH:mm");
         return fullDateFormat.format(fullDate);
     }
+
 }

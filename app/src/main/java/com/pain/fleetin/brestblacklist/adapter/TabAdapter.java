@@ -40,15 +40,15 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0:
+            case BEAUTY_AND_HEALTH_FRAGMENT_POSITION:
                 return beautyAndHealthFragment;
-            case 1:
+            case BUY_FRAGMENT_POSITION:
                 return buyFragment;
-            case 2:
+            case FUN_FRAGMENT_POSITION:
                 return funFragment;
-            case 3:
+            case PUB_FRAGMENT_POSITION:
                 return pubFragment;
-            case 4:
+            case TRANSPORT_FRAGMENT_POSITION:
                 return transportFragment;
             default:
                 return null;

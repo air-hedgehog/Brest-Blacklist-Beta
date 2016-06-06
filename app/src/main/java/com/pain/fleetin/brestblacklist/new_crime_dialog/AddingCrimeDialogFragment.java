@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,32 +28,43 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.pain.fleetin.brestblacklist.MainActivity;
+import com.pain.fleetin.brestblacklist.R;
+import com.pain.fleetin.brestblacklist.Utils;
+import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
+import com.pain.fleetin.brestblacklist.list_fragments.BuyFragment;
+import com.pain.fleetin.brestblacklist.list_fragments.FunFragment;
+import com.pain.fleetin.brestblacklist.list_fragments.PubFragment;
+import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
+import com.pain.fleetin.brestblacklist.model.ModelCard;
+
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.pain.fleetin.brestblacklist.R;
-import com.pain.fleetin.brestblacklist.Utils;
-import com.pain.fleetin.brestblacklist.model.ModelCard;
-
 public class AddingCrimeDialogFragment extends DialogFragment {
 
-    private static final int IMAGE_GALLERY_REQUEST = 20;
     private AddingCrimeListener addingCrimeListener;
 
     public ModelCard modelCard = new ModelCard();
+    public ImageButton photoIcon;
+    public ImageButton locationIcon;
 
-
+    public MainActivity activity;
     private static final int CAMERA_REQUEST = 10;
 
     private EditText etTitle;
     private EditText etDate;
     private EditText etTime;
-    private String choosenHashtag;
+
+    private BeautyAndHealthFragment beautyAndHealthFragment;
+    private BuyFragment buyFragment;
+    private FunFragment funFragment;
+    private PubFragment pubFragment;
+    private TransportFragment transportFragment;
 
     private boolean pictureSaved = false;
 
@@ -83,12 +93,12 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                modelCard.setPicturePath(pictureUri);
+                //modelCard.setPictureUri(pictureUri);
+                photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 pictureSaved = true;
                 Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     @Override
@@ -103,7 +113,6 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         View container = inflater.inflate(R.layout.dialog_crime, null);
 
-
         final TextInputLayout tilTitle = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTitle);
         etTitle = tilTitle.getEditText();
 
@@ -113,18 +122,19 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         TextInputLayout tilTime = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTime);
         etTime = tilTime.getEditText();
 
-
         final TextView spinnerHint = (TextView) container.findViewById(R.id.hashtag_spinner_hint);
         final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
 
         final Button takePictureButton = (Button) container.findViewById(R.id.take_picture_button);
         final Button setLocationButton = (Button) container.findViewById(R.id.set_location_button);
         final Button removeLocationButton = (Button) container.findViewById(R.id.remove_location_button);
-        final ImageButton photoIcon = (ImageButton) container.findViewById(R.id.take_picture_icon);
-        ImageButton locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
+        photoIcon = (ImageButton) container.findViewById(R.id.take_picture_icon);
+        locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
         final RelativeLayout takePictureFrame = (RelativeLayout) container.findViewById(R.id.take_picture_button_frame);
         final RelativeLayout setLocationFrame = (RelativeLayout) container.findViewById(R.id.set_location_button_frame);
 
+        photoIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
+        locationIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
 
         String hashTagBeauty = getResources().getString(R.string.hashtag_beauty);
         String hashTagBuy = getResources().getString(R.string.hashtag_buy);
@@ -142,11 +152,6 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, hashtagAssignment);
-
-        if (savedInstanceState != null) {
-            etTitle.setText(savedInstanceState.getString("title"));
-
-        }
 
         spHashtag.setAdapter(hashtagAdapter);
         spHashtag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -243,6 +248,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_OK_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 modelCard.setTitle(etTitle.getText().toString());
 
                 if (etDate.length() != 0 || etTime.length() != 0) {
@@ -251,7 +257,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                     modelCard.setDate(Calendar.getInstance().getTimeInMillis());
                 }
 
-                if (pictureSaved) {
+                /*if (pictureSaved) {
 
                     try {
                         Bitmap image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pictureUri);
@@ -261,7 +267,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                         e.printStackTrace();
                         Toast.makeText(getActivity(), "unable to get picture", Toast.LENGTH_LONG).show();
                     }
-                }
+                }*/
 
                 addingCrimeListener.onCrimeAdded(modelCard);
 
@@ -347,17 +353,27 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         return alertDialog;
     }
 
+    /*public int settingTab(ModelCard modelCard){
+
+        int tabPosition = 0;
+
+        if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_beauty))){
+            tabPosition = 0;
+        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_buy))) {
+            tabPosition = 1;
+        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_fun))) {
+            tabPosition = 2;
+        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_pub))) {
+            tabPosition = 3;
+        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_transport))) {
+            tabPosition = 4;
+        }
+        return tabPosition;
+    }*/
+
     private String getPictureName() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timestamp = sdf.format(new Date());
         return "Brest Blacklist Image " + timestamp + ".jpg";
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-
-        outState.putString("title", etTitle.getText().toString());
-
-        super.onSaveInstanceState(outState);
     }
 }

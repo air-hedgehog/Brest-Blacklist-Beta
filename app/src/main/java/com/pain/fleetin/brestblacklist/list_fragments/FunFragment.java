@@ -9,7 +9,11 @@ import android.view.ViewGroup;
 
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.adapter.FunAdapter;
+import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FunFragment extends CrimeFragment {
 
@@ -37,10 +41,10 @@ public class FunFragment extends CrimeFragment {
         return rootView;
     }
 
-    public void addCrime(ModelCard modelCard) {
+    public void addCrime(ModelCard modelCard, boolean saveToDB) {
 
         int position = -1;
-
+        checkAdapter();
         for (int i = 0; i < funAdapter.getItemCount(); i++) {
 
             ModelCard crime = (ModelCard) funAdapter.getItem(i);
@@ -55,12 +59,28 @@ public class FunFragment extends CrimeFragment {
         } else {
             funAdapter.addItem(modelCard);
         }
+
+        if (saveToDB){
+            activity.dbHelper.saveCrime(modelCard);
+        }
     }
 
     @Override
     public void checkAdapter() {
         if (adapter == null){
             adapter = new FunAdapter(this);
+        }
+    }
+
+    @Override
+    public void addCrimeFromDB() {
+        checkAdapter();
+        List<ModelCard> crimes = new ArrayList<>();
+        crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_HASHTAG,
+                new String[]{hashtag_fun}, DBHelper.CRIME_DATE_COLUMN));
+
+        for (int i = 0; i < crimes.size(); i++){
+            addCrime(crimes.get(i), false);
         }
     }
 }

@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.Utils;
 import com.pain.fleetin.brestblacklist.list_fragments.CrimeFragment;
 import com.pain.fleetin.brestblacklist.model.Item;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -104,9 +104,9 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             crimeViewHolder.date.setText(null);
         }
 
-        if (modelCard.getPicturePath() != null){
+        /*if (modelCard.getImageBitmap() != null){
             crimeViewHolder.photoCard.setImageBitmap(modelCard.getImageBitmap());
-        }
+        }*/
     }
 
     public CrimeFragment getCrimeFragment(){

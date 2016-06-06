@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.adapter.BeautyAndHealthAdapter;
+import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
-public class BeautyAndHealthFragment extends CrimeFragment {
+import java.util.ArrayList;
+import java.util.List;
 
+public class BeautyAndHealthFragment extends CrimeFragment {
     private BeautyAndHealthAdapter beautyAndHealthAdapter;
 
     private static final int LAYOUT = R.layout.fragment_health_and_beauty;
@@ -21,7 +24,6 @@ public class BeautyAndHealthFragment extends CrimeFragment {
 
     }
 
-    private ModelCard modelCard;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,10 +40,10 @@ public class BeautyAndHealthFragment extends CrimeFragment {
         return rootView;
     }
 
-    public void addCrime(ModelCard modelCard) {
+    public void addCrime(ModelCard modelCard, boolean saveToDB) {
 
         int position = -1;
-
+        checkAdapter();
         for (int i = 0; i < beautyAndHealthAdapter.getItemCount(); i++) {
 
             ModelCard crime = (ModelCard) beautyAndHealthAdapter.getItem(i);
@@ -56,12 +58,31 @@ public class BeautyAndHealthFragment extends CrimeFragment {
         } else {
             beautyAndHealthAdapter.addItem(modelCard);
         }
+
+        if (saveToDB){
+            activity.dbHelper.saveCrime(modelCard);
+        }
     }
 
     @Override
     public void checkAdapter() {
         if (adapter == null){
             adapter = new BeautyAndHealthAdapter(this);
+        }
+    }
+
+    @Override
+    public void addCrimeFromDB() {
+        checkAdapter();
+        List<ModelCard> crimes = new ArrayList<>();
+        crimes.addAll(activity
+                .dbHelper
+                .query()
+                .getCrimes(DBHelper.SELECTION_HASHTAG,
+                new String[]{hashtag_beauty}, DBHelper.CRIME_DATE_COLUMN));
+
+        for (int i = 0; i < crimes.size(); i++){
+            addCrime(crimes.get(i), false);
         }
     }
 }

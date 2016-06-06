@@ -2,9 +2,9 @@ package com.pain.fleetin.brestblacklist;
 
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.pain.fleetin.brestblacklist.adapter.TabAdapter;
+import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
 import com.pain.fleetin.brestblacklist.list_fragments.BuyFragment;
 import com.pain.fleetin.brestblacklist.list_fragments.CrimeFragment;
@@ -24,14 +25,6 @@ import com.pain.fleetin.brestblacklist.list_fragments.PubFragment;
 import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 import com.pain.fleetin.brestblacklist.new_crime_dialog.AddingCrimeDialogFragment;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.util.VKUtil;
-
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity
         implements AddingCrimeDialogFragment.AddingCrimeListener {
@@ -52,35 +45,77 @@ public class MainActivity extends AppCompatActivity
     private PubFragment pubFragment;
     private TransportFragment transportFragment;
 
-    private String[] scope = {
-            VKScope.GROUPS, VKScope.PHOTOS, VKScope.WALL
-    };
+    public int position = 0;
+
+    public String hashtag_beauty;
+    public String hashtag_buy;
+    public String hashtag_fun;
+    public String hashtag_pub;
+    public String hashtag_transport;
+
+    public DBHelper dbHelper;
+
+    //private String[] scope = {VKScope.GROUPS, VKScope.PHOTOS, VKScope.WALL};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
+
+        hashtag_beauty = getResources().getString(R.string.hashtag_beauty);
+        hashtag_buy = getResources().getString(R.string.hashtag_buy);
+        hashtag_fun = getResources().getString(R.string.hashtag_fun);
+        hashtag_pub = getResources().getString(R.string.hashtag_pub);
+        hashtag_transport = getResources().getString(R.string.hashtag_transport);
+
+        /*if (!VKSdk.wakeUpSession(this)){
+            VKSdk.login(this);
+        }*/
+
+        dbHelper = new DBHelper(getApplicationContext());
         setContentView(R.layout.activity_main);
 
         fragmentManager = getFragmentManager();
 
         initNavigationView();
+
+        modelCard = new ModelCard();
+
         setUI();
 
-        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
-        System.out.println(Arrays.asList(fingerprints));
-
-        VKSdk.login(this, scope);
 
     }
 
-    @Override
+    /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                // Пользователь успешно авторизовался
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                //71924797 fleetin_pain
+                final VKRequest vkRequest = new VKApiGroups().getById(VKParameters.from("group_ids", 71924797));
+                vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+
+                        VKList vkList = (VKList) response.parsedModel;
+
+                        try {
+                            VKRequest vkRequest1 = new VKApiWall()
+                                    .get(VKParameters.from(VKApiConst.OWNER_ID, "-" + vkList.get(0).fields.getInt("id"), VKApiConst.COUNT, 10));
+                            vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+
+                                    System.out.println(response.responseString);
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
 
             @Override
@@ -91,7 +126,7 @@ public class MainActivity extends AppCompatActivity
         })) {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
+    }*/
 
     private void setUI() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -142,6 +177,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
                 addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");
+
             }
         });
     }
@@ -150,9 +186,12 @@ public class MainActivity extends AppCompatActivity
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //Кнопка для открытия NavigationView
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.view_navigation_open, R.string.view_navigation_close);
-        drawerLayout.setDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.view_navigation_open, R.string.view_navigation_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
     }
 
     @Override
@@ -170,19 +209,19 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
     public void onCrimeAdded(ModelCard newCrime) {
-
         if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_beauty))) {
-            beautyAndHealthFragment.addCrime(newCrime);
+            beautyAndHealthFragment.addCrime(newCrime, true);
         } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_buy))) {
-            buyFragment.addCrime(newCrime);
+            buyFragment.addCrime(newCrime, true);
         } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_fun))) {
-            funFragment.addCrime(newCrime);
+            funFragment.addCrime(newCrime, true);
         } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_pub))) {
-            pubFragment.addCrime(newCrime);
+            pubFragment.addCrime(newCrime, true);
         } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_transport))) {
-            transportFragment.addCrime(newCrime);
+            transportFragment.addCrime(newCrime, true);
         }
 
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
@@ -192,4 +231,6 @@ public class MainActivity extends AppCompatActivity
     public void onCrimeAddingCanceled() {
         Toast.makeText(this, "Crime Adding Canceled", Toast.LENGTH_LONG).show();
     }
+
+
 }
