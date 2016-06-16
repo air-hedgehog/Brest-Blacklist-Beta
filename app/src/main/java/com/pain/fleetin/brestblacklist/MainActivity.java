@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,11 +17,7 @@ import android.widget.Toast;
 import com.pain.fleetin.brestblacklist.adapter.TabAdapter;
 import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.BuyFragment;
 import com.pain.fleetin.brestblacklist.list_fragments.CrimeFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.FunFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.PubFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 import com.pain.fleetin.brestblacklist.new_crime_dialog.AddingCrimeDialogFragment;
 
@@ -40,10 +35,10 @@ public class MainActivity extends AppCompatActivity
     private ModelCard modelCard;
 
     private BeautyAndHealthFragment beautyAndHealthFragment;
-    private BuyFragment buyFragment;
+    /*private BuyFragment buyFragment;
     private FunFragment funFragment;
     private PubFragment pubFragment;
-    private TransportFragment transportFragment;
+    private TransportFragment transportFragment;*/
 
     public int position = 0;
 
@@ -80,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         initNavigationView();
 
         modelCard = new ModelCard();
+        beautyAndHealthFragment = new BeautyAndHealthFragment();
 
         setUI();
 
@@ -135,18 +131,18 @@ public class MainActivity extends AppCompatActivity
             setSupportActionBar(toolbar);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        /*TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_beauty));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_buy));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_fun));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_pub));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_transport));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_transport));*/
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabAdapter = new TabAdapter(fragmentManager, 5);
+        tabAdapter = new TabAdapter(fragmentManager, 1);
 
         viewPager.setAdapter(tabAdapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -163,13 +159,13 @@ public class MainActivity extends AppCompatActivity
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
 
         beautyAndHealthFragment = (BeautyAndHealthFragment) tabAdapter.getItem(TabAdapter.BEAUTY_AND_HEALTH_FRAGMENT_POSITION);
-        buyFragment = (BuyFragment) tabAdapter.getItem(TabAdapter.BUY_FRAGMENT_POSITION);
+        /*buyFragment = (BuyFragment) tabAdapter.getItem(TabAdapter.BUY_FRAGMENT_POSITION);
         funFragment = (FunFragment) tabAdapter.getItem(TabAdapter.FUN_FRAGMENT_POSITION);
         pubFragment = (PubFragment) tabAdapter.getItem(TabAdapter.PUB_FRAGMENT_POSITION);
-        transportFragment = (TransportFragment) tabAdapter.getItem(TabAdapter.TRANSPORT_FRAGMENT_POSITION);
+        transportFragment = (TransportFragment) tabAdapter.getItem(TabAdapter.TRANSPORT_FRAGMENT_POSITION);*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -212,17 +208,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onCrimeAdded(ModelCard newCrime) {
-        if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_beauty))) {
-            beautyAndHealthFragment.addCrime(newCrime, true);
-        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_buy))) {
-            buyFragment.addCrime(newCrime, true);
-        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_fun))) {
-            funFragment.addCrime(newCrime, true);
-        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_pub))) {
-            pubFragment.addCrime(newCrime, true);
-        } else if (newCrime.getHashtag().equals(getResources().getString(R.string.hashtag_transport))) {
-            transportFragment.addCrime(newCrime, true);
-        }
+
+        beautyAndHealthFragment.addCrime(newCrime, true);
 
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
     }

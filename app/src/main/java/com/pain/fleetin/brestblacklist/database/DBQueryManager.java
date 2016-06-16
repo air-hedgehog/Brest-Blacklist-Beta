@@ -28,7 +28,7 @@ public class DBQueryManager {
                 String hashtag = c.getString(c.getColumnIndex(DBHelper.CRIME_HASHTAG_COLUMN));
                 long timestamp = c.getLong(c.getColumnIndex(DBHelper.CRIME_TIME_STAMP_COLUMN));
 
-                ModelCard card = new ModelCard(title, date, hashtag, timestamp);
+                ModelCard card = new ModelCard(title, date, hashtag, null, timestamp);
                 crimes.add(card);
             } while (c.moveToNext());
         }

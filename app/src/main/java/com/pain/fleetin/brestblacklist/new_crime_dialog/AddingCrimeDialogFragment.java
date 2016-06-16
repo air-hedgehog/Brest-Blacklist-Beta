@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +40,7 @@ import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,6 +134,9 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
         final RelativeLayout takePictureFrame = (RelativeLayout) container.findViewById(R.id.take_picture_button_frame);
         final RelativeLayout setLocationFrame = (RelativeLayout) container.findViewById(R.id.set_location_button_frame);
+
+        setLocationFrame.setVisibility(View.GONE);
+        removeLocationButton.setVisibility(View.GONE);
 
         photoIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
         locationIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
@@ -229,6 +234,21 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             }
         });
 
+        takePictureFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File pictureDirectory =(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                pictureName = getPictureName();
+                File imageFile = new File(pictureDirectory, pictureName);
+                pictureUri = Uri.fromFile(imageFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+            }
+        });
+
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,7 +277,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                     modelCard.setDate(Calendar.getInstance().getTimeInMillis());
                 }
 
-                /*if (pictureSaved) {
+                if (pictureSaved) {
 
                     try {
                         Bitmap image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pictureUri);
@@ -267,7 +287,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                         e.printStackTrace();
                         Toast.makeText(getActivity(), "unable to get picture", Toast.LENGTH_LONG).show();
                     }
-                }*/
+                }
 
                 addingCrimeListener.onCrimeAdded(modelCard);
 
@@ -294,14 +314,10 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                     spinnerHint.setVisibility(View.INVISIBLE);
                     spHashtag.setEnabled(false);
 
+                    takePictureFrame.setEnabled(false);
                     takePictureButton.setEnabled(false);
                     takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
 
-
-                    setLocationButton.setEnabled(false);
-                    setLocationButton.setTextColor(getResources().getColor(R.color.gray_200));
-
-                    removeLocationButton.setEnabled(false);
                 }
 
                 etTitle.addTextChangedListener(new TextWatcher() {
@@ -316,28 +332,22 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                             positiveButton.setEnabled(false);
                             tilTitle.setError(getResources().getString(R.string.dialog_error_empty_title));
                             spHashtag.setEnabled(false);
+                            takePictureFrame.setEnabled(false);
                             takePictureButton.setEnabled(false);
                             takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
-                            setLocationButton.setEnabled(false);
-                            setLocationButton.setTextColor(getResources().getColor(R.color.gray_200));
-                            removeLocationButton.setEnabled(false);
                             spinnerHint.setVisibility(View.INVISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
                             takePictureFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
-                            setLocationFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
                         } else {
                             positiveButton.setEnabled(true);
                             tilTitle.setErrorEnabled(false);
                             spHashtag.setEnabled(true);
+                            takePictureFrame.setEnabled(true);
                             takePictureButton.setEnabled(true);
                             takePictureButton.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                            setLocationButton.setEnabled(true);
-                            setLocationButton.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                            removeLocationButton.setEnabled(true);
                             spinnerHint.setVisibility(View.VISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                             takePictureFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                            setLocationFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
                         }
                     }
@@ -352,24 +362,6 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         return alertDialog;
     }
-
-    /*public int settingTab(ModelCard modelCard){
-
-        int tabPosition = 0;
-
-        if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_beauty))){
-            tabPosition = 0;
-        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_buy))) {
-            tabPosition = 1;
-        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_fun))) {
-            tabPosition = 2;
-        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_pub))) {
-            tabPosition = 3;
-        } else if (modelCard.getHashtag().equals(getActivity().getString(R.string.hashtag_transport))) {
-            tabPosition = 4;
-        }
-        return tabPosition;
-    }*/
 
     private String getPictureName() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");

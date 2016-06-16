@@ -104,9 +104,11 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             crimeViewHolder.date.setText(null);
         }
 
-        /*if (modelCard.getImageBitmap() != null){
+        if (modelCard.getImageBitmap() != null){
             crimeViewHolder.photoCard.setImageBitmap(modelCard.getImageBitmap());
-        }*/
+        } else {
+            crimeViewHolder.photoCard.setVisibility(View.GONE);
+        }
     }
 
     public CrimeFragment getCrimeFragment(){
