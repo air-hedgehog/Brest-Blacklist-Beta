@@ -49,6 +49,13 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    public void removeAllItems(){
+        if (getItemCount() != 0){
+            items = new ArrayList<>();
+            notifyDataSetChanged();
+        }
+    }
+
     @Override
     public int getItemCount() {
         return items.size();

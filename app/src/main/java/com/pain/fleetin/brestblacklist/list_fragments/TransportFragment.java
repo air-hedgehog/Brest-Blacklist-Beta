@@ -77,11 +77,18 @@ public class TransportFragment extends CrimeFragment {
     public void addCrimeFromDB() {
         checkAdapter();
         List<ModelCard> crimes = new ArrayList<>();
-        crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_HASHTAG,
-                new String[]{hashtag_transport}, DBHelper.CRIME_DATE_COLUMN));
+        crimes.addAll(activity
+                .dbHelper
+                .query()
+                .getCrimes(DBHelper.CRIME_DATE_COLUMN));
 
         for (int i = 0; i < crimes.size(); i++){
             addCrime(crimes.get(i), false);
         }
+    }
+
+    @Override
+    public void findCrimes(String title) {
+
     }
 }

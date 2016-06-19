@@ -128,15 +128,12 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
 
         final Button takePictureButton = (Button) container.findViewById(R.id.take_picture_button);
-        final Button setLocationButton = (Button) container.findViewById(R.id.set_location_button);
-        final Button removeLocationButton = (Button) container.findViewById(R.id.remove_location_button);
+        //final Button setLocationButton = (Button) container.findViewById(R.id.set_location_button);
+        //final Button removeLocationButton = (Button) container.findViewById(R.id.remove_location_button);
         photoIcon = (ImageButton) container.findViewById(R.id.take_picture_icon);
         locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
         final RelativeLayout takePictureFrame = (RelativeLayout) container.findViewById(R.id.take_picture_button_frame);
         final RelativeLayout setLocationFrame = (RelativeLayout) container.findViewById(R.id.set_location_button_frame);
-
-        setLocationFrame.setVisibility(View.GONE);
-        removeLocationButton.setVisibility(View.GONE);
 
         photoIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
         locationIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));

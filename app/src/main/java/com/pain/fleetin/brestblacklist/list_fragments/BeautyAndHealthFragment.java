@@ -66,20 +66,31 @@ public class BeautyAndHealthFragment extends CrimeFragment {
 
     @Override
     public void checkAdapter() {
-        if (adapter == null){
-            adapter = new BeautyAndHealthAdapter(this);
+        if (beautyAndHealthAdapter == null){
+            beautyAndHealthAdapter = new BeautyAndHealthAdapter(this);
         }
     }
 
     @Override
     public void addCrimeFromDB() {
-        checkAdapter();
+        beautyAndHealthAdapter.removeAllItems();
         List<ModelCard> crimes = new ArrayList<>();
         crimes.addAll(activity
                 .dbHelper
                 .query()
-                .getCrimes(DBHelper.SELECTION_HASHTAG,
-                new String[]{hashtag_beauty}, DBHelper.CRIME_DATE_COLUMN));
+                .getCrimes(DBHelper.CRIME_DATE_COLUMN));
+
+        for (int i = 0; i < crimes.size(); i++){
+            addCrime(crimes.get(i), false);
+        }
+    }
+
+    @Override
+    public void findCrimes(String title) {
+        beautyAndHealthAdapter.removeAllItems();
+        List<ModelCard> crimes = new ArrayList<>();
+        crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_LIKE_TITLE,
+                new String[] {"%" + title + "%"}, DBHelper.CRIME_DATE_COLUMN));
 
         for (int i = 0; i < crimes.size(); i++){
             addCrime(crimes.get(i), false);

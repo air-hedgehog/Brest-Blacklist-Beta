@@ -20,15 +20,20 @@ public abstract class CrimeFragment extends Fragment {
 
     public abstract void checkAdapter();
 
+    public abstract void addCrimeFromDB();
+
+    public abstract void findCrimes(String title);
+
     public String hashtag_beauty;
     public String hashtag_buy;
     public String hashtag_fun;
+
     public String hashtag_pub;
+
     public String hashtag_transport;
 
-    public abstract void addCrimeFromDB();
-
     public String hashtag;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -47,6 +52,4 @@ public abstract class CrimeFragment extends Fragment {
 
         addCrimeFromDB();
     }
-
-
 }

@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,13 +43,9 @@ public class MainActivity extends AppCompatActivity
 
     public int position = 0;
 
-    public String hashtag_beauty;
-    public String hashtag_buy;
-    public String hashtag_fun;
-    public String hashtag_pub;
-    public String hashtag_transport;
-
     public DBHelper dbHelper;
+
+    SearchView searchView;
 
     //private String[] scope = {VKScope.GROUPS, VKScope.PHOTOS, VKScope.WALL};
 
@@ -56,12 +53,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-
-        hashtag_beauty = getResources().getString(R.string.hashtag_beauty);
-        hashtag_buy = getResources().getString(R.string.hashtag_buy);
-        hashtag_fun = getResources().getString(R.string.hashtag_fun);
-        hashtag_pub = getResources().getString(R.string.hashtag_pub);
-        hashtag_transport = getResources().getString(R.string.hashtag_transport);
 
         /*if (!VKSdk.wakeUpSession(this)){
             VKSdk.login(this);
@@ -130,6 +121,20 @@ public class MainActivity extends AppCompatActivity
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
             setSupportActionBar(toolbar);
         }
+
+        searchView = (SearchView) findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                beautyAndHealthFragment.findCrimes(newText);
+                return false;
+            }
+        });
 
         /*TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_beauty));

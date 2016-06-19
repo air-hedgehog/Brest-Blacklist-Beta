@@ -26,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper{
             CRIME_HASHTAG_COLUMN + " TEXT NOT NULL, " +
             CRIME_TIME_STAMP_COLUMN + " LONG);";
 
-    public static final String SELECTION_HASHTAG = DBHelper.CRIME_HASHTAG_COLUMN + " = ?";
+    public static final String SELECTION_LIKE_TITLE = CRIME_TITLE_COLUMN + " LIKE ?";
 
     private DBQueryManager queryManager;
     private DBUpdateManager updateManager;
