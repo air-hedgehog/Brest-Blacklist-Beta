@@ -82,8 +82,7 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.model_card, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.model_card, parent, false);
         TextView title = (TextView) v.findViewById(R.id.tvCrimeTitle);
         TextView date = (TextView) v.findViewById(R.id.tvCrimeDate);
         CardView cardView = (CardView) v.findViewById(R.id.cardView);
