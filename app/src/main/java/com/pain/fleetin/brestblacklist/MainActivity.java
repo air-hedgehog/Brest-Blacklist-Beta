@@ -116,12 +116,12 @@ public class MainActivity extends AppCompatActivity
                         try {
                             VKRequest vkRequest1 = new VKApiWall()
                                     .get(VKParameters.from(VKApiConst.OWNER_ID, "-" +
-                                            vkList.get(0).fields.getInt("id"), VKApiConst.COUNT, 4));
+                                            vkList.get(0).fields.getInt("id"), VKApiConst.COUNT, 100));
                             vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    List<ModelCard> crimePosts = new ArrayList<>();
+                                    ArrayList<ModelCard> crimePosts = new ArrayList<>();
                                     try {
                                         JSONObject jsonObject = (JSONObject) response.json.get("response");
                                         JSONArray jsonArray = (JSONArray) jsonObject.get("items");
@@ -129,15 +129,38 @@ public class MainActivity extends AppCompatActivity
                                         for (int i = 0; i < jsonArray.length(); i++){
                                             JSONObject post = (JSONObject) jsonArray.get(i);
                                             ModelCard modelCard = new ModelCard();
-                                            modelCard.setTitle(post.getString("text"));
-                                            modelCard.setDate(post.getLong("date"));
 
-                                            crimePosts.add(modelCard);
+                                            if (!post.getString("text").equals("")){
+                                                modelCard.setTitle(post.getString("text"));
+                                                //нужно домножить на 1000, потому что Date() ожидает
+                                                //милисекунды, а response возвращает unxTimeStamp:
+                                                modelCard.setDate(post.getLong("date") * 1000);
+                                                try {
+                                                    JSONArray attachmentsArray = (JSONArray) post.get("attachments");
+                                                    for (int j = 0; j < attachmentsArray.length(); j++){
+                                                        JSONObject firstAttachment = (JSONObject) attachmentsArray.get(j);
+                                                        if (((JSONObject) attachmentsArray.get(j)).get("type").equals("photo")){
+                                                            JSONObject photo = (JSONObject) firstAttachment.get("photo");
+                                                            modelCard.setPictureURL(photo.getString("photo_604"));
+                                                            break;
+                                                        }
+                                                    }
+                                                } catch (JSONException e){
+                                                    modelCard.setPictureURL(null);
+                                                    e.printStackTrace();
+                                                }
+
+                                                crimePosts.add(modelCard);
+                                            }
+
                                         }
-
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+                                    /*for (int k = 0; k < crimePosts.size(); k++){
+                                        System.out.println(crimePosts.get(k));
+                                    }*/
+
                                     vkQuery(crimePosts);
                                 }
                             });
@@ -255,6 +278,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void vkQuery (List<ModelCard> crimePosts){
+        /*DBHelper dbHelper = new DBHelper(this);
+        dbHelper.onUpgrade(DBHelper.DATABASE_NAME);*/
         for (int i = 0; i < crimePosts.size(); i++){
             beautyAndHealthFragment.addCrime(crimePosts.get(i), true);
         }

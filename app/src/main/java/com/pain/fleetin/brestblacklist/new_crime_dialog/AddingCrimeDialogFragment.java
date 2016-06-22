@@ -95,7 +95,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                //modelCard.setPictureUri(pictureUri);
+                //modelCard.setPictureURL(pictureUri);
                 photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 pictureSaved = true;
                 Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
@@ -278,7 +278,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
                     try {
                         Bitmap image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pictureUri);
-                        modelCard.setImageBitmap(image);
+                        //modelCard.setImageBitmap(image);
 
                     } catch (IOException e) {
                         e.printStackTrace();

@@ -89,6 +89,7 @@ public class BeautyAndHealthFragment extends CrimeFragment {
     public void findCrimes(String title) {
         beautyAndHealthAdapter.removeAllItems();
         List<ModelCard> crimes = new ArrayList<>();
+
         crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_LIKE_TITLE,
                 new String[] {"%" + title + "%"}, DBHelper.CRIME_DATE_COLUMN));
 

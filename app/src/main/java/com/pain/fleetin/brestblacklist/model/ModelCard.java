@@ -9,7 +9,7 @@ public class ModelCard implements Item{
     private String title;
     private long date;
     private String hashtag;
-    //private Uri pictureUri;
+    private String pictureURL;
     private Bitmap imageBitmap;
     private long timestamp;
 
@@ -17,11 +17,11 @@ public class ModelCard implements Item{
         this.timestamp = new Date().getTime();
     }
 
-    public ModelCard(String title, long date, String hashtag, /*Uri pictureUri,*/ Bitmap imageBitmap, long timestamp){
+    public ModelCard(String title, long date, String hashtag, String pictureURL, Bitmap imageBitmap, long timestamp){
         this.title = title;
         this.date = date;
         this.hashtag = hashtag;
-        //this.pictureUri = pictureUri;
+        this.pictureURL = pictureURL;
         //this.imageBitmap = imageBitmap;
         this.timestamp = timestamp;
     }
@@ -50,13 +50,13 @@ public class ModelCard implements Item{
         this.hashtag = hashtag;
     }
 
-    /*public Uri getPictureUri() {
-        return pictureUri;
+    public String getPictureURL() {
+        return pictureURL;
     }
 
-    public void setPictureUri(Uri pictureUri) {
-        this.pictureUri = pictureUri;
-    }*/
+    public void setPictureURL(String pictureURL) {
+        this.pictureURL = pictureURL;
+    }
 
     public Bitmap getImageBitmap() {
         return imageBitmap;

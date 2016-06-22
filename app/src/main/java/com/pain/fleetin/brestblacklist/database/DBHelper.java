@@ -17,13 +17,13 @@ public class DBHelper extends SQLiteOpenHelper{
     public static final String CRIME_TITLE_COLUMN = "crime_title";
     public static final String CRIME_DATE_COLUMN = "crime_date";
     public static final String CRIME_HASHTAG_COLUMN = "crime_hashtag";
-    //public static final String CRIME_IMAGE_BITMAP_COLUMN = "crime_image_bitmap";
+    public static final String CRIME_PICTURE_URL_COLUMN = "crime_picture_url";
     public static final String CRIME_TIME_STAMP_COLUMN = "crime_time_stamp";
 
     public static final String CRIMES_TABLE_CREATE_SCRIPT = "CREATE TABLE " +
             CRIMES_TABLE + " (" + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            CRIME_TITLE_COLUMN + " TEXT NOT NULL, " + CRIME_DATE_COLUMN + " LONG, " +
-            CRIME_HASHTAG_COLUMN + " TEXT NOT NULL, " +
+            CRIME_TITLE_COLUMN + " TEXT NOT NULL, " + CRIME_DATE_COLUMN + " LONG NOT NULL, " +
+            CRIME_HASHTAG_COLUMN + " TEXT, " + CRIME_PICTURE_URL_COLUMN + " TEXT, " +
             CRIME_TIME_STAMP_COLUMN + " LONG);";
 
     public static final String SELECTION_LIKE_TITLE = CRIME_TITLE_COLUMN + " LIKE ?";
@@ -56,7 +56,7 @@ public class DBHelper extends SQLiteOpenHelper{
         newValues.put(CRIME_TITLE_COLUMN, card.getTitle());
         newValues.put(CRIME_DATE_COLUMN, card.getDate());
         newValues.put(CRIME_HASHTAG_COLUMN, card.getHashtag());
-        //newValues.put(CRIME_IMAGE_BITMAP_COLUMN, card.getImageBitmap());
+        newValues.put(CRIME_PICTURE_URL_COLUMN, card.getPictureURL());
         newValues.put(CRIME_TIME_STAMP_COLUMN, card.getTimestamp());
 
         getWritableDatabase().insert(CRIMES_TABLE, null, newValues);

@@ -25,10 +25,15 @@ public class DBUpdateManager {
         update(DBHelper.CRIME_HASHTAG_COLUMN, timestamp, hashtag);
     }
 
+    public void imageURL(long timestamp, String imageURL){
+        update(DBHelper.CRIME_PICTURE_URL_COLUMN, timestamp, imageURL);
+    }
+
     public void card (ModelCard card){
         title(card.getTimestamp(), card.getTitle());
         date(card.getTimestamp(), card.getDate());
         hashtag(card.getTimestamp(), card.getHashtag());
+        imageURL(card.getTimestamp(), card.getPictureURL());
     }
 
     private void update(String column, long key, String value){
