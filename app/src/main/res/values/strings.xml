@@ -3,8 +3,11 @@
     <integer name="com_vk_sdk_AppId">5489677</integer>
     <string name="search_title">Search</string>
 
-    <string name="menu_item_favourites">Favourites</string>
     <string name="menu_item_beauty">Beauty and health</string>
+    <string name="menu_item_buy">Purchases</string>
+    <string name="menu_item_fun">Entertainment</string>
+    <string name="menu_item_pub">Public catering</string>
+    <string name="menu_item_transport">Transport</string>
 
     <string name="view_navigation_open">Open</string>
     <string name="view_navigation_close">Close</string>
@@ -23,6 +26,7 @@
 
     <string name="new_crime_dialog_label">New Crime</string>
     <string name="new_crime_title">Title:</string>
+    <string name="post_time_mark">Happened in:</string>
 
     <string name="new_title_hint">Title</string>
     <string name="new_date_hint">Date</string>
@@ -40,5 +44,18 @@
     <string name="dialog_toast_image_added">Image added</string>
     <string name="dialog_toast_location_added">Location added</string>
     <string name="dialog_toast_location_removed">Location removed</string>
+
+    <string name="notification_ticker">Publication…</string>
+    <string name="notification_title">Uploading</string>
+    <string name="notification_text">Message publication</string>
+
+    <string name="toast_uploading_done">Your message will be available soon</string>
+    <string name="toast_uploading_error">Message sending error!</string>
+    <string name="toast_uploading_photo_error">Photo uploading error!</string>
+
+    <string name="action_sign_in_short">Sign in with VK</string>
+    <string name="continue_using_app">Continue using application</string>
+    <string name="logout">Logout</string>
+    <string name="authentication_error">Authentication Error</string>
 
 </resources>

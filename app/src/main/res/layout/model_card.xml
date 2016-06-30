@@ -8,7 +8,8 @@
     card:cardCornerRadius="0dp"
     card:cardElevation="2dp"
     android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp">
+    android:layout_marginRight="2dp"
+    android:clickable="true">
 
     <RelativeLayout
         android:id="@+id/card_content"
@@ -17,10 +18,10 @@
 
         <ImageView
             android:id="@+id/card_image_view"
-            android:layout_height="wrap_content"
+            android:layout_height="220dp"
             android:layout_width="match_parent"
             android:layout_margin="8dp"
-            android:scaleType="fitCenter" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/tvCrimeTitle"
@@ -46,6 +47,15 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvCrimeDate"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/postId"
+            android:visibility="visible"/>
 
 
 

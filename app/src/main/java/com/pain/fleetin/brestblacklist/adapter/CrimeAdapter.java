@@ -1,6 +1,8 @@
 package com.pain.fleetin.brestblacklist.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,8 +28,10 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     CrimeFragment crimeFragment;
 
     public ModelCard modelCard;
+    private Context context;
 
-    public CrimeAdapter(CrimeFragment crimeFragment) {
+    public CrimeAdapter(CrimeFragment crimeFragment, Context context) {
+        this.context = context;
         this.crimeFragment = crimeFragment;
         items = new ArrayList<>();
     }
@@ -60,6 +64,7 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -72,7 +77,8 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         protected CardView cardView;
         protected ImageView photoCard;
 
-        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView, ImageView photoCard) {
+        public CrimeViewHolder(View itemView, TextView title, TextView date, CardView cardView,
+                               ImageView photoCard) {
             super(itemView);
             this.title = title;
             this.date = date;
@@ -103,6 +109,7 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         crimeViewHolder.title.setText(modelCard.getTitle());
         crimeViewHolder.date.setText(Utils.getFullDate(modelCard.getDate()));
+
         if (modelCard.getPictureURL() == null) {
             crimeViewHolder.photoCard.setVisibility(View.GONE);
         } else {
@@ -114,8 +121,28 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .error(R.drawable.ic_error_outline_black_24dp)
                     .into(crimeViewHolder.photoCard);
         }
+        final String postId;
+        if (modelCard.getPostId() != 0){
+            postId = String.valueOf(modelCard.getPostId());
+        } else {
+            postId = null;
+        }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format("https://vk.com/wall-%d_%s",
+                        Utils.BREST_BLACKLIST, postId)));
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+
+            }
+        });
+
 
     }
+
+
 
     public CrimeFragment getCrimeFragment() {
         return crimeFragment;

@@ -3,13 +3,32 @@
 
     <item
         android:orderInCategory="1"
-        android:title="@string/menu_item_favourites"
-        android:icon="@drawable/ic_star"/>
-
-    <item
-        android:orderInCategory="3"
         android:id="@+id/menu_navigation_item_beauty"
         android:title="@string/menu_item_beauty"
         android:icon="@drawable/ic_heart_pulse"/>
+
+    <item
+        android:orderInCategory="2"
+        android:id="@+id/menu_navigation_item_buy"
+        android:title="@string/menu_item_buy"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"/>
+
+    <item
+        android:orderInCategory="3"
+        android:id="@+id/menu_navigation_item_fun"
+        android:title="@string/menu_item_fun"
+        android:icon="@drawable/ic_stars_black_24dp"/>
+
+    <item
+        android:orderInCategory="4"
+        android:id="@+id/menu_navigation_item_pub"
+        android:title="@string/menu_item_pub"
+        android:icon="@drawable/ic_local_dining_black_24dp"/>
+
+    <item
+        android:orderInCategory="5"
+        android:id="@+id/menu_navigation_item_transport"
+        android:title="@string/menu_item_transport"
+        android:icon="@drawable/ic_directions_bus_black_24dp"/>
 
 </menu>

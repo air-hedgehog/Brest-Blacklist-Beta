@@ -29,11 +29,16 @@ public class DBUpdateManager {
         update(DBHelper.CRIME_PICTURE_URL_COLUMN, timestamp, imageURL);
     }
 
+    public void postId (long timestamp, long postId){
+        update(DBHelper.CRIME_POST_ID_COLUMN, timestamp, postId);
+    }
+
     public void card (ModelCard card){
         title(card.getTimestamp(), card.getTitle());
         date(card.getTimestamp(), card.getDate());
         hashtag(card.getTimestamp(), card.getHashtag());
         imageURL(card.getTimestamp(), card.getPictureURL());
+        postId(card.getTimestamp(), card.getPostId());
     }
 
     private void update(String column, long key, String value){

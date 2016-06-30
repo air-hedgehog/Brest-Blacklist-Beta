@@ -1,8 +1,6 @@
 package com.pain.fleetin.brestblacklist;
 
-import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,19 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pain.fleetin.brestblacklist.VKUtils.VKUpload;
 import com.pain.fleetin.brestblacklist.adapter.BeautyAndHealthAdapter;
 import com.pain.fleetin.brestblacklist.adapter.TabAdapter;
 import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.CrimeFragment;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 import com.pain.fleetin.brestblacklist.new_crime_dialog.AddingCrimeDialogFragment;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -41,146 +34,116 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements AddingCrimeDialogFragment.AddingCrimeListener {
 
 
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-
-    private FragmentManager fragmentManager;
-    private TabAdapter tabAdapter;
-
-    private CrimeFragment crimeFragment;
-
-    private BeautyAndHealthFragment beautyAndHealthFragment;
-    /*private BuyFragment buyFragment;
-    private FunFragment funFragment;
-    private PubFragment pubFragment;
-    private TransportFragment transportFragment;*/
-
-
     public DBHelper dbHelper;
     public BeautyAndHealthAdapter beautyAndHealthAdapter;
-    Calendar calendar;
-    SearchView searchView;
+    private Toolbar toolbar;
+    private DrawerLayout drawerLayout;
+    private FragmentManager fragmentManager;
+    private VKUpload.UploadOnePhoto uploadOnePhoto;
+    private BeautyAndHealthFragment beautyAndHealthFragment;
 
-    private String[] scope = {VKScope.GROUPS, VKScope.PHOTOS, VKScope.WALL, VKScope.PAGES};
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-
-        //if (!VKSdk.wakeUpSession(this)){
-            VKSdk.login(this, scope);
-        //}
-
-        dbHelper = new DBHelper(getApplicationContext());
         setContentView(R.layout.activity_main);
 
+        dbHelper = new DBHelper(getApplicationContext());
         fragmentManager = getFragmentManager();
 
-        initNavigationView();
-
         beautyAndHealthFragment = new BeautyAndHealthFragment();
+        beautyAndHealthAdapter = new BeautyAndHealthAdapter(beautyAndHealthFragment, this);
 
+        initNavigationView();
         setUI();
+        vkRequest();
+
     }
 
-    // 71924797 fleetin_pain
-    // 122565629 closed noname
-    // 84025643 brest blacklist
+    private void vkRequest() {
+        beautyAndHealthAdapter.removeAllItems();
+        VKRequest vkRequest = new VKApiGroups()
+                .getById(VKParameters.from("group_ids", 84025643));
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+        vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+
             @Override
-            public void onResult(VKAccessToken res) {
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKList vkList = (VKList) response.parsedModel;
 
-                VKRequest vkRequest = new VKApiGroups()
-                        .getById(VKParameters.from("group_ids", 84025643));
+                try {
+                    VKRequest vkRequest1 = new VKApiWall()
+                            .get(VKParameters.from(VKApiConst.OWNER_ID, "-" +
+                                    vkList.get(0).fields.getInt("id"), VKApiConst.COUNT, 100));
+                    vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            ArrayList<ModelCard> crimePosts = new ArrayList<>();
+                            try {
+                                JSONObject jsonObject = (JSONObject) response.json.get("response");
+                                JSONArray jsonArray = (JSONArray) jsonObject.get("items");
 
-                vkRequest.executeWithListener(new VKRequest.VKRequestListener() {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject post = (JSONObject) jsonArray.get(i);
+                                    ModelCard modelCard = new ModelCard();
 
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        VKList vkList = (VKList) response.parsedModel;
-
-                        try {
-                            VKRequest vkRequest1 = new VKApiWall()
-                                    .get(VKParameters.from(VKApiConst.OWNER_ID, "-" +
-                                            vkList.get(0).fields.getInt("id"), VKApiConst.COUNT, 100));
-                            vkRequest1.executeWithListener(new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(VKResponse response) {
-                                    super.onComplete(response);
-                                    ArrayList<ModelCard> crimePosts = new ArrayList<>();
-                                    try {
-                                        JSONObject jsonObject = (JSONObject) response.json.get("response");
-                                        JSONArray jsonArray = (JSONArray) jsonObject.get("items");
-
-                                        for (int i = 0; i < jsonArray.length(); i++){
-                                            JSONObject post = (JSONObject) jsonArray.get(i);
-                                            ModelCard modelCard = new ModelCard();
-
-                                            if (!post.getString("text").equals("")){
-                                                modelCard.setTitle(post.getString("text"));
-                                                //нужно домножить на 1000, потому что Date() ожидает
-                                                //милисекунды, а response возвращает unxTimeStamp:
-                                                modelCard.setDate(post.getLong("date") * 1000);
-                                                try {
-                                                    JSONArray attachmentsArray = (JSONArray) post.get("attachments");
-                                                    for (int j = 0; j < attachmentsArray.length(); j++){
-                                                        JSONObject firstAttachment = (JSONObject) attachmentsArray.get(j);
-                                                        if (((JSONObject) attachmentsArray.get(j)).get("type").equals("photo")){
-                                                            JSONObject photo = (JSONObject) firstAttachment.get("photo");
-                                                            modelCard.setPictureURL(photo.getString("photo_604"));
-                                                            break;
-                                                        }
-                                                    }
-                                                } catch (JSONException e){
-                                                    modelCard.setPictureURL(null);
-                                                    e.printStackTrace();
+                                    if (!post.getString("text").equals("")) {
+                                        modelCard.setPostId(post.getLong("id"));
+                                        System.out.println(modelCard.getPostId());
+                                        modelCard.setTitle(post.getString("text"));
+                                        //нужно домножить на 1000, потому что Date() ожидает
+                                        //милисекунды, а response возвращает unxTimeStamp:
+                                        modelCard.setDate(post.getLong("date") * 1000);
+                                        try {
+                                            JSONArray attachmentsArray = (JSONArray) post.get("attachments");
+                                            for (int j = 0; j < attachmentsArray.length(); j++) {
+                                                JSONObject firstAttachment = (JSONObject) attachmentsArray.get(j);
+                                                if (((JSONObject) attachmentsArray.get(j)).has("photo")) {
+                                                    JSONObject photo = (JSONObject) firstAttachment.get("photo");
+                                                    modelCard.setPictureURL(photo.getString("photo_604"));
+                                                    break;
                                                 }
-
-                                                crimePosts.add(modelCard);
                                             }
-
+                                        } catch (JSONException e) {
+                                            modelCard.setPictureURL(null);
+                                            e.printStackTrace();
                                         }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+
+                                        crimePosts.add(modelCard);
                                     }
-                                    /*for (int k = 0; k < crimePosts.size(); k++){
-                                        System.out.println(crimePosts.get(k));
-                                    }*/
 
-                                    vkQuery(crimePosts);
                                 }
-                            });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            vkQuery(crimePosts);
                         }
-                    }
-                });
-            }
+                    });
 
-            @Override
-            public void onError(VKError error) {
-                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        })) {
+        });
+    }
 
+    public void vkQuery(List<ModelCard> crimePosts) {
+        for (int i = 0; i < crimePosts.size(); i++) {
+            beautyAndHealthFragment.addCrime(crimePosts.get(i), true);
         }
     }
+
 
     private void setUI() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -211,7 +174,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.addTab(tabLayout.newTab().setText(R.string.tab_item_transport));*/
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabAdapter = new TabAdapter(fragmentManager, 1);
+        TabAdapter tabAdapter = new TabAdapter(fragmentManager, 1);
 
         viewPager.setAdapter(tabAdapter);
         /*viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -243,12 +206,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
-                addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");
-
+                /*DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
+                addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");*/
             }
         });
     }
+
 
     private void initNavigationView() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -277,15 +240,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void vkQuery (List<ModelCard> crimePosts){
-        /*DBHelper dbHelper = new DBHelper(this);
-        dbHelper.onUpgrade(DBHelper.DATABASE_NAME);*/
-        for (int i = 0; i < crimePosts.size(); i++){
-            beautyAndHealthFragment.addCrime(crimePosts.get(i), true);
-        }
-    }
-
-
     @Override
     public void onCrimeAdded(ModelCard newCrime) {
 
@@ -293,7 +247,6 @@ public class MainActivity extends AppCompatActivity
 
         Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
     }
-
 
 
     @Override

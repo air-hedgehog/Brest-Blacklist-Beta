@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.pain.fleetin.brestblacklist.MainActivity;
 import com.pain.fleetin.brestblacklist.R;
+import com.pain.fleetin.brestblacklist.adapter.BeautyAndHealthAdapter;
 import com.pain.fleetin.brestblacklist.adapter.CrimeAdapter;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
@@ -17,7 +18,8 @@ public abstract class CrimeFragment extends Fragment {
     protected CrimeAdapter adapter;
     public MainActivity activity;
     protected ModelCard modelCard;
-
+    private BeautyAndHealthAdapter beautyAndHealthAdapter;
+    private BeautyAndHealthFragment beautyAndHealthFragment;
     public abstract void checkAdapter();
 
     public abstract void addCrimeFromDB();
@@ -45,11 +47,13 @@ public abstract class CrimeFragment extends Fragment {
         hashtag_pub = getResources().getString(R.string.hashtag_pub);
         hashtag_transport = getResources().getString(R.string.hashtag_transport);
 
+        beautyAndHealthFragment = new BeautyAndHealthFragment();
+        beautyAndHealthAdapter = new BeautyAndHealthAdapter(beautyAndHealthFragment, getActivity().getApplicationContext());
 
         if (getActivity() != null){
             activity = (MainActivity) getActivity();
         }
 
-        addCrimeFromDB();
+
     }
 }

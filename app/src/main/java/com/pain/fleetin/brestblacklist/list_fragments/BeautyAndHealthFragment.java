@@ -34,7 +34,7 @@ public class BeautyAndHealthFragment extends CrimeFragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        beautyAndHealthAdapter = new BeautyAndHealthAdapter(this);
+        beautyAndHealthAdapter = new BeautyAndHealthAdapter(this, getActivity().getApplicationContext());
         recyclerView.setAdapter(beautyAndHealthAdapter);
 
         return rootView;
@@ -67,7 +67,7 @@ public class BeautyAndHealthFragment extends CrimeFragment {
     @Override
     public void checkAdapter() {
         if (beautyAndHealthAdapter == null){
-            beautyAndHealthAdapter = new BeautyAndHealthAdapter(this);
+            beautyAndHealthAdapter = new BeautyAndHealthAdapter(this, getActivity().getApplicationContext());
         }
     }
 
@@ -97,4 +97,6 @@ public class BeautyAndHealthFragment extends CrimeFragment {
             addCrime(crimes.get(i), false);
         }
     }
+
+
 }

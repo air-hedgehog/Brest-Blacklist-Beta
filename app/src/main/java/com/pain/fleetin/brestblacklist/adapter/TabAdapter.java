@@ -5,10 +5,6 @@ import android.app.FragmentManager;
 import android.support.v13.app.FragmentStatePagerAdapter;
 
 import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.BuyFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.FunFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.PubFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
 
 public class TabAdapter extends FragmentStatePagerAdapter {
 
@@ -21,20 +17,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
     public static final int TRANSPORT_FRAGMENT_POSITION = 4;
 
     private BeautyAndHealthFragment beautyAndHealthFragment;
-    private BuyFragment buyFragment;
-    private FunFragment funFragment;
-    private PubFragment pubFragment;
-    private TransportFragment transportFragment;
 
     public TabAdapter(FragmentManager fm, int numberOfTabs) {
         super(fm);
         this.numberOfTabs = numberOfTabs;
 
         beautyAndHealthFragment = new BeautyAndHealthFragment();
-        buyFragment = new BuyFragment();
-        funFragment = new FunFragment();
-        pubFragment = new PubFragment();
-        transportFragment = new TransportFragment();
+
     }
 
     @Override
@@ -43,13 +32,13 @@ public class TabAdapter extends FragmentStatePagerAdapter {
             case BEAUTY_AND_HEALTH_FRAGMENT_POSITION:
                 return beautyAndHealthFragment;
             case BUY_FRAGMENT_POSITION:
-                return buyFragment;
+                return null;
             case FUN_FRAGMENT_POSITION:
-                return funFragment;
+                return null;
             case PUB_FRAGMENT_POSITION:
-                return pubFragment;
+                return null;
             case TRANSPORT_FRAGMENT_POSITION:
-                return transportFragment;
+                return null;
             default:
                 return null;
         }

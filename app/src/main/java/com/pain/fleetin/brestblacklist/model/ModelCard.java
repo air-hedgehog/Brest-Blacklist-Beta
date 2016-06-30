@@ -1,7 +1,5 @@
 package com.pain.fleetin.brestblacklist.model;
 
-import android.graphics.Bitmap;
-
 import java.util.Date;
 
 public class ModelCard implements Item{
@@ -10,20 +8,20 @@ public class ModelCard implements Item{
     private long date;
     private String hashtag;
     private String pictureURL;
-    private Bitmap imageBitmap;
     private long timestamp;
+    private long postId;
 
     public ModelCard(){
         this.timestamp = new Date().getTime();
     }
 
-    public ModelCard(String title, long date, String hashtag, String pictureURL, Bitmap imageBitmap, long timestamp){
+    public ModelCard(String title, long date, String hashtag, String pictureURL, long timestamp, long postId){
         this.title = title;
         this.date = date;
         this.hashtag = hashtag;
         this.pictureURL = pictureURL;
-        //this.imageBitmap = imageBitmap;
         this.timestamp = timestamp;
+        this.postId = postId;
     }
 
     public String getTitle() {
@@ -58,13 +56,6 @@ public class ModelCard implements Item{
         this.pictureURL = pictureURL;
     }
 
-    public Bitmap getImageBitmap() {
-        return imageBitmap;
-    }
-
-    public void setImageBitmap(Bitmap imageBitmap) {
-        this.imageBitmap = imageBitmap;
-    }
     public long getTimestamp() {
         return timestamp;
     }
@@ -73,4 +64,11 @@ public class ModelCard implements Item{
         this.timestamp = timestamp;
     }
 
+    public long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(long postId) {
+        this.postId = postId;
+    }
 }

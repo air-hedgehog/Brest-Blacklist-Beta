@@ -32,11 +32,7 @@ import android.widget.Toast;
 import com.pain.fleetin.brestblacklist.MainActivity;
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.Utils;
-import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.BuyFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.FunFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.PubFragment;
-import com.pain.fleetin.brestblacklist.list_fragments.TransportFragment;
+import com.pain.fleetin.brestblacklist.VKUtils.TitleAndImages;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
 import java.io.File;
@@ -62,11 +58,8 @@ public class AddingCrimeDialogFragment extends DialogFragment {
     private EditText etDate;
     private EditText etTime;
 
-    private BeautyAndHealthFragment beautyAndHealthFragment;
-    private BuyFragment buyFragment;
-    private FunFragment funFragment;
-    private PubFragment pubFragment;
-    private TransportFragment transportFragment;
+
+    private TitleAndImages titleAndImages = new TitleAndImages();
 
     private boolean pictureSaved = false;
 
@@ -95,11 +88,16 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                //modelCard.setPictureURL(pictureUri);
-                photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                pictureSaved = true;
-                Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
+                if (titleAndImages.picturesUri().size() <= 5) {
+                    titleAndImages.picturesUri().add(pictureUri);
+                    photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                    pictureSaved = true;
+                    Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
+                }
+
+
             }
+
         }
     }
 
@@ -235,7 +233,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File pictureDirectory =(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                File pictureDirectory = (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 pictureName = getPictureName();
                 File imageFile = new File(pictureDirectory, pictureName);
                 pictureUri = Uri.fromFile(imageFile);
@@ -250,7 +248,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File pictureDirectory =(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
+                File pictureDirectory = (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 pictureName = getPictureName();
                 File imageFile = new File(pictureDirectory, pictureName);
                 pictureUri = Uri.fromFile(imageFile);
@@ -265,6 +263,8 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_OK_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                //activity.pos
 
                 modelCard.setTitle(etTitle.getText().toString());
 

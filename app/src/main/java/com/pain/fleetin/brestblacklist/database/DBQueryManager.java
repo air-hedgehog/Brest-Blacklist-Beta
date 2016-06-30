@@ -28,8 +28,9 @@ public class DBQueryManager {
                 String hashtag = c.getString(c.getColumnIndex(DBHelper.CRIME_HASHTAG_COLUMN));
                 String pictureURL = c.getString(c.getColumnIndex(DBHelper.CRIME_PICTURE_URL_COLUMN));
                 long timestamp = c.getLong(c.getColumnIndex(DBHelper.CRIME_TIME_STAMP_COLUMN));
+                long postId = c.getInt(c.getColumnIndex(DBHelper.CRIME_POST_ID_COLUMN));
 
-                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, null, timestamp);
+                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, timestamp, postId);
                 crimes.add(card);
             } while (c.moveToNext());
         }
@@ -49,8 +50,9 @@ public class DBQueryManager {
                 String hashtag = c.getString(c.getColumnIndex(DBHelper.CRIME_HASHTAG_COLUMN));
                 String pictureURL = c.getString(c.getColumnIndex(DBHelper.CRIME_PICTURE_URL_COLUMN));
                 long timestamp = c.getLong(c.getColumnIndex(DBHelper.CRIME_TIME_STAMP_COLUMN));
+                long postId = c.getInt(c.getColumnIndex(DBHelper.CRIME_POST_ID_COLUMN));
 
-                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, null, timestamp);
+                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, timestamp, postId);
                 crimes.add(card);
             } while (c.moveToNext());
         }
