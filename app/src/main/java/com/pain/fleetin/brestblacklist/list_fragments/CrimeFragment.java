@@ -20,6 +20,7 @@ public abstract class CrimeFragment extends Fragment {
     protected ModelCard modelCard;
     private BeautyAndHealthAdapter beautyAndHealthAdapter;
     private BeautyAndHealthFragment beautyAndHealthFragment;
+
     public abstract void checkAdapter();
 
     public abstract void addCrimeFromDB();

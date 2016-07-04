@@ -1,26 +1,22 @@
 package com.pain.fleetin.brestblacklist.model;
 
-import java.util.Date;
-
 public class ModelCard implements Item{
 
     private String title;
     private long date;
     private String hashtag;
     private String pictureURL;
-    private long timestamp;
     private long postId;
 
     public ModelCard(){
-        this.timestamp = new Date().getTime();
+
     }
 
-    public ModelCard(String title, long date, String hashtag, String pictureURL, long timestamp, long postId){
+    public ModelCard(String title, long date, String hashtag, String pictureURL, long postId){
         this.title = title;
         this.date = date;
         this.hashtag = hashtag;
         this.pictureURL = pictureURL;
-        this.timestamp = timestamp;
         this.postId = postId;
     }
 
@@ -54,14 +50,6 @@ public class ModelCard implements Item{
 
     public void setPictureURL(String pictureURL) {
         this.pictureURL = pictureURL;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public long getPostId() {

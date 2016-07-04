@@ -1,6 +1,7 @@
 package com.pain.fleetin.brestblacklist.list_fragments;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,10 +16,12 @@ import com.pain.fleetin.brestblacklist.model.ModelCard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeautyAndHealthFragment extends CrimeFragment {
+public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefreshLayout.OnRefreshListener {
     private BeautyAndHealthAdapter beautyAndHealthAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private static final int LAYOUT = R.layout.fragment_health_and_beauty;
+
 
     public BeautyAndHealthFragment(){
 
@@ -36,6 +39,10 @@ public class BeautyAndHealthFragment extends CrimeFragment {
 
         beautyAndHealthAdapter = new BeautyAndHealthAdapter(this, getActivity().getApplicationContext());
         recyclerView.setAdapter(beautyAndHealthAdapter);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeColors(R.color.colorWhite, R.color.colorPrimary,
+                 R.color.colorAccent);
 
         return rootView;
     }
@@ -78,7 +85,7 @@ public class BeautyAndHealthFragment extends CrimeFragment {
         crimes.addAll(activity
                 .dbHelper
                 .query()
-                .getCrimes(DBHelper.CRIME_DATE_COLUMN));
+                .getCrimes(null, null, DBHelper.CRIME_DATE_COLUMN));
 
         for (int i = 0; i < crimes.size(); i++){
             addCrime(crimes.get(i), false);
@@ -88,6 +95,7 @@ public class BeautyAndHealthFragment extends CrimeFragment {
     @Override
     public void findCrimes(String title) {
         beautyAndHealthAdapter.removeAllItems();
+
         List<ModelCard> crimes = new ArrayList<>();
 
         crimes.addAll(activity.dbHelper.query().getCrimes(DBHelper.SELECTION_LIKE_TITLE,
@@ -99,4 +107,16 @@ public class BeautyAndHealthFragment extends CrimeFragment {
     }
 
 
+    @Override
+    public void onRefresh() {
+        beautyAndHealthAdapter.removeAllItems();
+        activity.dbHelper.query().removeCrimes();
+        activity.vkRequest();
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }, 3000);
+    }
 }

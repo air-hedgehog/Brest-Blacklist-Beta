@@ -57,5 +57,6 @@
     <string name="continue_using_app">Continue using application</string>
     <string name="logout">Logout</string>
     <string name="authentication_error">Authentication Error</string>
+    <string name="dialog_photos_of"> of 3</string>
 
 </resources>

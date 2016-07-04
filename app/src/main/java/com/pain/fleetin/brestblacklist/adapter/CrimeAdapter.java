@@ -58,6 +58,9 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void removeAllItems() {
+        for (int i =0 ; i < getItemCount() - 1; i++){
+            removeItem(i);
+        }
         if (getItemCount() != 0) {
             items = new ArrayList<>();
             notifyDataSetChanged();
@@ -117,8 +120,8 @@ public abstract class CrimeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             Context context = ((CrimeViewHolder) holder).photoCard.getContext();
             Picasso.with(context)
                     .load(modelCard.getPictureURL())
-                    .placeholder(R.drawable.ic_file_download_black_24dp)
-                    .error(R.drawable.ic_error_outline_black_24dp)
+                    .placeholder(R.drawable.ic_download_grey600_48dp)
+                    .error(R.drawable.ic_error_outline_black_48dp)
                     .into(crimeViewHolder.photoCard);
         }
         final String postId;

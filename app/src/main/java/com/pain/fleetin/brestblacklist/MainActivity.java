@@ -1,6 +1,11 @@
 package com.pain.fleetin.brestblacklist;
 
+import android.app.DialogFragment;
 import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -45,10 +50,19 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private FragmentManager fragmentManager;
-    private VKUpload.UploadOnePhoto uploadOnePhoto;
     private BeautyAndHealthFragment beautyAndHealthFragment;
+    private VKUpload vkUpload;
+    private VKUpload.UploadOnePhoto uploadOnePhoto;
+
+    public NotificationManager nm;
 
     SearchView searchView;
+
+    String hashTagBeauty;
+    String hashTagBuy;
+    String hashTagFun;
+    String hashTagPub;
+    String hashTagTransport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +76,32 @@ public class MainActivity extends AppCompatActivity
         beautyAndHealthFragment = new BeautyAndHealthFragment();
         beautyAndHealthAdapter = new BeautyAndHealthAdapter(beautyAndHealthFragment, this);
 
-        initNavigationView();
         setUI();
+        beautyAndHealthAdapter.removeAllItems();
+        dbHelper.query().removeCrimes();
         vkRequest();
+
+        hashTagBeauty = getResources().getString(R.string.hashtag_beauty);
+        hashTagBuy = getResources().getString(R.string.hashtag_buy);
+        hashTagFun = getResources().getString(R.string.hashtag_fun);
+        hashTagPub = getResources().getString(R.string.hashtag_pub);
+        hashTagTransport = getResources().getString(R.string.hashtag_transport);
 
     }
 
-    private void vkRequest() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (vkUpload != null) {
+            if (uploadOnePhoto != null)
+                uploadOnePhoto.cancel(true);
+
+
+            nm.cancel(Utils.UPLOAD_NOTIFICATION_ID);
+        }
+    }
+
+    public void vkRequest() {
         beautyAndHealthAdapter.removeAllItems();
         VKRequest vkRequest = new VKApiGroups()
                 .getById(VKParameters.from("group_ids", 84025643));
@@ -150,7 +183,23 @@ public class MainActivity extends AppCompatActivity
         if (toolbar != null) {
             toolbar.setTitleTextColor(getResources().getColor(R.color.colorWhite));
             setSupportActionBar(toolbar);
+            drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+            //Кнопка для открытия NavigationView
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                    R.string.view_navigation_open, R.string.view_navigation_close);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem item) {
+                    drawerLayout.closeDrawers();
+                    searchByHashtag(item.getItemId());
+                    return true;
+                }
+            });
         }
+
 
         searchView = (SearchView) findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -206,23 +255,24 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
-                addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");*/
+                DialogFragment addingCrimeDialogFragment = new AddingCrimeDialogFragment();
+                addingCrimeDialogFragment.show(fragmentManager, "AddingCrimeDialogFragment");
             }
         });
     }
 
-
-    private void initNavigationView() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        //Кнопка для открытия NavigationView
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
-                R.string.view_navigation_open, R.string.view_navigation_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+    public void searchByHashtag(int res) {
+        if (res == R.id.menu_navigation_item_beauty) {
+            searchView.setQuery(hashTagBeauty, false);
+        } else if (res == R.id.menu_navigation_item_buy){
+            searchView.setQuery(hashTagBuy, false);
+        } else if (res == R.id.menu_navigation_item_fun){
+            searchView.setQuery(hashTagFun, false);
+        } else if (res == R.id.menu_navigation_item_pub){
+            searchView.setQuery(hashTagPub, false);
+        } else if (res == R.id.menu_navigation_item_transport){
+            searchView.setQuery(hashTagTransport, false);
+        }
     }
 
     @Override
@@ -240,12 +290,44 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void uploadProgressNotification() {
+        nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setSmallIcon(android.R.drawable.stat_sys_upload)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
+                .setWhen(System.currentTimeMillis())
+                .setTicker(getResources().getString(R.string.notification_ticker))
+                .setContentTitle(getResources().getString(R.string.notification_title))
+                .setContentText(getResources().getString(R.string.notification_text))
+                .setProgress(100, 0, true)
+                .setAutoCancel(true);
+
+        Notification notification = builder.getNotification();
+        notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+        nm.notify(Utils.UPLOAD_NOTIFICATION_ID, notification);
+
+    }
+
     @Override
-    public void onCrimeAdded(ModelCard newCrime) {
+    public void onCrimeAdded(String picturePath, String fullPost) {
 
-        beautyAndHealthFragment.addCrime(newCrime, false);
+        vkUpload = new VKUpload(this.getApplicationContext(), this);
 
-        Toast.makeText(this, "Crime Added", Toast.LENGTH_LONG).show();
+        if (picturePath == null) {
+            vkUpload.makePost(null, fullPost);
+        } else {
+            uploadOnePhoto = new VKUpload(this.getApplicationContext(), this)
+                    .new UploadOnePhoto(picturePath, fullPost);
+            uploadOnePhoto.execute();
+        } /*else if (picturePath.size() == 2) {
+            uploadTwoPhotos = new VKUpload(this.getApplicationContext())
+                    .new UploadTwoPhotos(picturePath, fullPost);
+            uploadTwoPhotos.execute();
+        } else if (picturePath.size() == 3) {
+            uploadThreePhotos = new VKUpload(this.getApplicationContext())
+                    .new UploadThreePhotos(picturePath, fullPost);
+            uploadThreePhotos.execute();
+        }*/
     }
 
 
@@ -253,6 +335,5 @@ public class MainActivity extends AppCompatActivity
     public void onCrimeAddingCanceled() {
         Toast.makeText(this, "Crime Adding Canceled", Toast.LENGTH_LONG).show();
     }
-
 
 }

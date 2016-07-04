@@ -27,10 +27,9 @@ public class DBQueryManager {
                 long date = c.getLong(c.getColumnIndex(DBHelper.CRIME_DATE_COLUMN));
                 String hashtag = c.getString(c.getColumnIndex(DBHelper.CRIME_HASHTAG_COLUMN));
                 String pictureURL = c.getString(c.getColumnIndex(DBHelper.CRIME_PICTURE_URL_COLUMN));
-                long timestamp = c.getLong(c.getColumnIndex(DBHelper.CRIME_TIME_STAMP_COLUMN));
                 long postId = c.getInt(c.getColumnIndex(DBHelper.CRIME_POST_ID_COLUMN));
 
-                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, timestamp, postId);
+                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, postId);
                 crimes.add(card);
             } while (c.moveToNext());
         }
@@ -38,26 +37,8 @@ public class DBQueryManager {
         return  crimes;
     }
 
-    public List<ModelCard> getCrimes(String orderBy){
-        List<ModelCard> crimes = new ArrayList<>();
-
-        Cursor c = database.query(DBHelper.CRIMES_TABLE, null, null, null, null, null, orderBy);
-
-        if (c.moveToFirst()){
-            do {
-                String title = c.getString(c.getColumnIndex(DBHelper.CRIME_TITLE_COLUMN));
-                long date = c.getLong(c.getColumnIndex(DBHelper.CRIME_DATE_COLUMN));
-                String hashtag = c.getString(c.getColumnIndex(DBHelper.CRIME_HASHTAG_COLUMN));
-                String pictureURL = c.getString(c.getColumnIndex(DBHelper.CRIME_PICTURE_URL_COLUMN));
-                long timestamp = c.getLong(c.getColumnIndex(DBHelper.CRIME_TIME_STAMP_COLUMN));
-                long postId = c.getInt(c.getColumnIndex(DBHelper.CRIME_POST_ID_COLUMN));
-
-                ModelCard card = new ModelCard(title, date, hashtag, pictureURL, timestamp, postId);
-                crimes.add(card);
-            } while (c.moveToNext());
-        }
-        c.close();
-        return  crimes;
+    public void removeCrimes (){
+        database.delete(DBHelper.CRIMES_TABLE, null, null);
     }
 
 }

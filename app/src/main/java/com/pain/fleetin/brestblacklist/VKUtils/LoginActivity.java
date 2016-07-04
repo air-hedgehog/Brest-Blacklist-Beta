@@ -1,4 +1,4 @@
-package com.pain.fleetin.brestblacklist;
+package com.pain.fleetin.brestblacklist.VKUtils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.pain.fleetin.brestblacklist.MainActivity;
+import com.pain.fleetin.brestblacklist.R;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;

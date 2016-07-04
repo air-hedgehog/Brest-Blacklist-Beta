@@ -14,7 +14,7 @@
         android:name=".Application"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.pain.fleetin.brestblacklist.LoginActivity"
+            android:name=".VKUtils.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"

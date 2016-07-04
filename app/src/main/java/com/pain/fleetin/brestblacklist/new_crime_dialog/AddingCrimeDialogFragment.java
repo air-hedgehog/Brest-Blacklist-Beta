@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,14 +28,11 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.pain.fleetin.brestblacklist.MainActivity;
 import com.pain.fleetin.brestblacklist.R;
 import com.pain.fleetin.brestblacklist.Utils;
-import com.pain.fleetin.brestblacklist.VKUtils.TitleAndImages;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,27 +43,27 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
     private AddingCrimeListener addingCrimeListener;
 
-    public ModelCard modelCard = new ModelCard();
+    public ModelCard modelCard;
     public ImageButton photoIcon;
     public ImageButton locationIcon;
+    public String picturePath;
 
-    public MainActivity activity;
+
     private static final int CAMERA_REQUEST = 10;
 
     private EditText etTitle;
     private EditText etDate;
     private EditText etTime;
 
-
-    private TitleAndImages titleAndImages = new TitleAndImages();
-
     private boolean pictureSaved = false;
 
     private String pictureName;
     private Uri pictureUri;
+    private String choosenDate;
+    private String choosenTime;
 
     public interface AddingCrimeListener {
-        void onCrimeAdded(ModelCard newCrime);
+        void onCrimeAdded(String picturePath, String fullPost);
 
         void onCrimeAddingCanceled();
     }
@@ -77,6 +73,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         super.onAttach(activity);
         try {
             addingCrimeListener = (AddingCrimeListener) activity;
+
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString() + " must implement AddingCrimeListener");
         }
@@ -88,53 +85,38 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == CAMERA_REQUEST) {
-                if (titleAndImages.picturesUri().size() <= 5) {
-                    titleAndImages.picturesUri().add(pictureUri);
-                    photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                    pictureSaved = true;
-                    Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
-                }
-
-
+                photoIcon.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                pictureSaved = true;
+                Toast.makeText(getActivity(), R.string.dialog_toast_image_added, Toast.LENGTH_SHORT).show();
             }
 
         }
     }
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
         super.onCreateDialog(savedInstanceState);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.new_crime_dialog_label);
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
         View container = inflater.inflate(R.layout.dialog_crime, null);
+        modelCard = new ModelCard();
 
         final TextInputLayout tilTitle = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTitle);
         etTitle = tilTitle.getEditText();
-
         TextInputLayout tilDate = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeDate);
         etDate = tilDate.getEditText();
-
         TextInputLayout tilTime = (TextInputLayout) container.findViewById(R.id.tilDialogCrimeTime);
         etTime = tilTime.getEditText();
-
         final TextView spinnerHint = (TextView) container.findViewById(R.id.hashtag_spinner_hint);
         final FrameLayout spinnerFrame = (FrameLayout) container.findViewById(R.id.spinner_frame);
-
-        final Button takePictureButton = (Button) container.findViewById(R.id.take_picture_button);
-        //final Button setLocationButton = (Button) container.findViewById(R.id.set_location_button);
-        //final Button removeLocationButton = (Button) container.findViewById(R.id.remove_location_button);
         photoIcon = (ImageButton) container.findViewById(R.id.take_picture_icon);
-        locationIcon = (ImageButton) container.findViewById(R.id.set_location_icon);
+        final Button takePictureButton = (Button) container.findViewById(R.id.take_picture_button);
         final RelativeLayout takePictureFrame = (RelativeLayout) container.findViewById(R.id.take_picture_button_frame);
-        final RelativeLayout setLocationFrame = (RelativeLayout) container.findViewById(R.id.set_location_button_frame);
 
         photoIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
-        locationIcon.setBackgroundColor(getResources().getColor(R.color.gray_200));
 
         String hashTagBeauty = getResources().getString(R.string.hashtag_beauty);
         String hashTagBuy = getResources().getString(R.string.hashtag_buy);
@@ -166,6 +148,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             }
         });
 
+
         tilTitle.setHint(getResources().getString(R.string.new_title_hint));
         tilDate.setHint(getResources().getString(R.string.new_date_hint));
         tilTime.setHint(getResources().getString(R.string.new_time_hint));
@@ -173,24 +156,27 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         builder.setView(container);
 
         final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
+
 
         etDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (etDate.length() == 0) {
-                    etDate.setText(" ");
-                }
-
                 DialogFragment datePickerFragment = new DatePickerFragment() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                        etDate.setText(Utils.getDate(calendar.getTimeInMillis()));
+
+                        if (calendar.getTimeInMillis() <= Calendar.getInstance().getTimeInMillis()) {
+
+                            etDate.setText(Utils.getDate(calendar.getTimeInMillis()));
+                            choosenDate = Utils.getDate(calendar.getTimeInMillis());
+                        }
+
                     }
 
                     @Override
@@ -205,18 +191,22 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         etTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (etTime.length() == 0) {
-                    etTime.setText(" ");
-                }
+
 
                 DialogFragment timePickerFragment = new TimePickerFragment() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+
                         calendar.set(Calendar.HOUR_OF_DAY, hour);
                         calendar.set(Calendar.MINUTE, minute);
                         calendar.set(Calendar.SECOND, 0);
 
-                        etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
+
+                        if (calendar.getTimeInMillis() <= Calendar.getInstance().getTimeInMillis()) {
+                            etTime.setText(Utils.getTime(calendar.getTimeInMillis()));
+                            choosenTime = Utils.getTime(calendar.getTimeInMillis());
+                        }
+
 
                     }
 
@@ -238,8 +228,10 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                 File imageFile = new File(pictureDirectory, pictureName);
                 pictureUri = Uri.fromFile(imageFile);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
-
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
+
+                picturePath = imageFile.getAbsolutePath();
+
 
             }
         });
@@ -247,16 +239,20 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File pictureDirectory = (Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
                 pictureName = getPictureName();
                 File imageFile = new File(pictureDirectory, pictureName);
                 pictureUri = Uri.fromFile(imageFile);
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
-
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
+                picturePath = imageFile.getAbsolutePath();
+
+
             }
+
         });
 
 
@@ -264,29 +260,17 @@ public class AddingCrimeDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                //activity.pos
+                String fullPost;
 
-                modelCard.setTitle(etTitle.getText().toString());
-
-                if (etDate.length() != 0 || etTime.length() != 0) {
-                    modelCard.setDate(calendar.getTimeInMillis());
+                if (choosenDate != null || choosenTime != null) {
+                    fullPost = modelCard.getHashtag() + "\n\n" +
+                            etTitle.getText().toString() + "\n\n Happened in: " + choosenDate + "  " + choosenTime;
                 } else {
-                    modelCard.setDate(Calendar.getInstance().getTimeInMillis());
+                    fullPost = modelCard.getHashtag() + "\n\n" +
+                            etTitle.getText().toString();
                 }
 
-                if (pictureSaved) {
-
-                    try {
-                        Bitmap image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), pictureUri);
-                        //modelCard.setImageBitmap(image);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(getActivity(), "unable to get picture", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                addingCrimeListener.onCrimeAdded(modelCard);
+                addingCrimeListener.onCrimeAdded(picturePath, fullPost);
 
                 dialogInterface.dismiss();
             }
@@ -301,7 +285,9 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         });
 
         AlertDialog alertDialog = builder.create();
+
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 final Button positiveButton = ((AlertDialog) dialogInterface).getButton(DialogInterface.BUTTON_POSITIVE);
@@ -311,16 +297,27 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                     spinnerHint.setVisibility(View.INVISIBLE);
                     spHashtag.setEnabled(false);
 
-                    takePictureFrame.setEnabled(false);
                     takePictureButton.setEnabled(false);
                     takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
+                    takePictureFrame.setEnabled(false);
+                    takePictureFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
 
+                } else {
+                    positiveButton.setEnabled(true);
+                    tilTitle.setErrorEnabled(false);
+                    spinnerHint.setVisibility(View.VISIBLE);
+                    spHashtag.setEnabled(true);
+
+                    takePictureButton.setEnabled(true);
+                    takePictureButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                    takePictureFrame.setEnabled(true);
+                    takePictureFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
                 }
+
 
                 etTitle.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
                     }
 
                     @Override
@@ -329,21 +326,21 @@ public class AddingCrimeDialogFragment extends DialogFragment {
                             positiveButton.setEnabled(false);
                             tilTitle.setError(getResources().getString(R.string.dialog_error_empty_title));
                             spHashtag.setEnabled(false);
-                            takePictureFrame.setEnabled(false);
-                            takePictureButton.setEnabled(false);
-                            takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
                             spinnerHint.setVisibility(View.INVISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
+                            takePictureButton.setEnabled(false);
+                            takePictureButton.setTextColor(getResources().getColor(R.color.gray_200));
+                            takePictureFrame.setEnabled(false);
                             takePictureFrame.setBackgroundColor(getResources().getColor(R.color.gray_200));
                         } else {
                             positiveButton.setEnabled(true);
                             tilTitle.setErrorEnabled(false);
                             spHashtag.setEnabled(true);
-                            takePictureFrame.setEnabled(true);
-                            takePictureButton.setEnabled(true);
-                            takePictureButton.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                             spinnerHint.setVisibility(View.VISIBLE);
                             spinnerFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                            takePictureButton.setEnabled(true);
+                            takePictureButton.setTextColor(getResources().getColor(R.color.colorAccent));
+                            takePictureFrame.setEnabled(true);
                             takePictureFrame.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
                         }
@@ -351,7 +348,6 @@ public class AddingCrimeDialogFragment extends DialogFragment {
 
                     @Override
                     public void afterTextChanged(Editable editable) {
-
                     }
                 });
             }

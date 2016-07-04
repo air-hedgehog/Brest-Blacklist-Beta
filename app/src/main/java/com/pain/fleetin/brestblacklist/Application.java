@@ -2,6 +2,7 @@ package com.pain.fleetin.brestblacklist;
 
 import android.content.Intent;
 
+import com.pain.fleetin.brestblacklist.VKUtils.LoginActivity;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
