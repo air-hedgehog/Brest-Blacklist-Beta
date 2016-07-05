@@ -3,26 +3,24 @@
     <integer name="com_vk_sdk_AppId">5489677</integer>
     <string name="search_title">Search</string>
 
+    <string name="toolbar_menu_logout_item">Logout</string>
+
     <string name="menu_item_beauty">Beauty and health</string>
     <string name="menu_item_buy">Purchases</string>
     <string name="menu_item_fun">Entertainment</string>
     <string name="menu_item_pub">Public catering</string>
     <string name="menu_item_transport">Transport</string>
+    <string name="menu_item_deceivers">Deceivers</string>
 
     <string name="view_navigation_open">Open</string>
     <string name="view_navigation_close">Close</string>
-
-    <string name="tab_item_beauty">Beauty and health</string>
-    <string name="tab_item_buy">Purchases</string>
-    <string name="tab_item_transport">Transport</string>
-    <string name="tab_item_pub">Public catering</string>
-    <string name="tab_item_fun">Entertainment</string>
 
     <string name="hashtag_beauty">#Beauty_and_health</string>
     <string name="hashtag_buy">#Purchases</string>
     <string name="hashtag_transport">#Transport</string>
     <string name="hashtag_pub">#Public_catering</string>
     <string name="hashtag_fun">#Entertainment</string>
+    <string name="hastag_deceivers">#Deceivers</string>
 
     <string name="new_crime_dialog_label">New Crime</string>
     <string name="new_crime_title">Title:</string>

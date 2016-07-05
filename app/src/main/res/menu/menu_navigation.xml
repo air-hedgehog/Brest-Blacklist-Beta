@@ -31,4 +31,10 @@
         android:title="@string/menu_item_transport"
         android:icon="@drawable/ic_directions_bus_black_24dp"/>
 
+    <item
+        android:orderInCategory="5"
+        android:id="@+id/menu_navigation_item_deceivers"
+        android:title="@string/menu_item_deceivers"
+        android:icon="@drawable/ic_warning_black_24dp"/>
+
 </menu>

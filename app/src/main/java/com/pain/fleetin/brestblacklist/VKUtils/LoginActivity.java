@@ -39,6 +39,7 @@ public class LoginActivity extends FragmentActivity{
                             showLogin();
                             break;
                         case LoggedIn:
+                            showLogout();
                             break;
                         case Pending:
                             break;
@@ -84,7 +85,7 @@ public class LoginActivity extends FragmentActivity{
                 .commitAllowingStateLoss();
     }
 
-    private void showLogout() {
+    public void showLogout() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, new LogoutFragment())

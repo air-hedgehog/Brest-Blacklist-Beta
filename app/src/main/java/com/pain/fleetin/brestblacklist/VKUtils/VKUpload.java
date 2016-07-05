@@ -59,7 +59,7 @@ public class VKUpload {
         protected VKBatchRequest doInBackground(Void... params) {
 
             Bitmap photo = rotatePicture(picturePath);
-            VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
+            VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
             return new VKBatchRequest(request);
 
         }
@@ -154,8 +154,8 @@ public class VKUpload {
             Bitmap photo1 = BitmapFactory.decodeFile(photos.get(0));
             Bitmap photo2 = BitmapFactory.decodeFile(photos.get(1));
 
-            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo1, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo2, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
+            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo1, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo2, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
             return new VKBatchRequest(request1, request2);
         }
 
@@ -214,9 +214,9 @@ public class VKUpload {
             Bitmap photo2 = BitmapFactory.decodeFile(photos.get(1));
             Bitmap photo3 = BitmapFactory.decodeFile(photos.get(2));
 
-            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo1, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo2, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo3, VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
+            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo1, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo2, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo3, VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
 
             return new VKBatchRequest(request1, request2, request3);
         }
@@ -286,10 +286,10 @@ public class VKUpload {
                 e.printStackTrace();
             }
 
-            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo1), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo2), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo3), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request4 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo4), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
+            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo1), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo2), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo3), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request4 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo4), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
             return new VKBatchRequest(request1, request2, request3, request4);
         }
 
@@ -360,11 +360,11 @@ public class VKUpload {
                 e.printStackTrace();
             }
 
-            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo1), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo2), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo3), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request4 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo4), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
-            VKRequest request5 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo5), VKImageParameters.jpgImage(0.6f)), 0, Utils.FLEETIN_PAIN);
+            VKRequest request1 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo1), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request2 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo2), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request3 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo3), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request4 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo4), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
+            VKRequest request5 = VKApi.uploadWallPhotoRequest(new VKUploadImage(onPortraitOrientation(photo5), VKImageParameters.jpgImage(0.6f)), 0, Utils.BREST_BLACKLIST);
             return new VKBatchRequest(request1, request2, request3, request4, request5);
         }
 
@@ -401,7 +401,7 @@ public class VKUpload {
 
 
     public void makePost(VKAttachments attachments, String message) {
-        VKRequest post = VKApi.wall().post(VKParameters.from(VKApiConst.OWNER_ID, "-" + 71924797,
+        VKRequest post = VKApi.wall().post(VKParameters.from(VKApiConst.OWNER_ID, "-" + Utils.BREST_BLACKLIST,
                 VKApiConst.ATTACHMENTS, attachments, VKApiConst.MESSAGE, message));
         post.setModelClass(VKWallPostResult.class);
 

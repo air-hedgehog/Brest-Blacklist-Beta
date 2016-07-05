@@ -123,6 +123,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         String hashTagFun = getResources().getString(R.string.hashtag_fun);
         String hashTagPub = getResources().getString(R.string.hashtag_pub);
         String hashTagTransport = getResources().getString(R.string.hashtag_transport);
+        String hashTagDeceivers = getResources().getString(R.string.hastag_deceivers);
 
         final Spinner spHashtag = (Spinner) container.findViewById(R.id.spDialogCrime);
         List<String> hashtagAssignment = new ArrayList<String>();
@@ -131,6 +132,7 @@ public class AddingCrimeDialogFragment extends DialogFragment {
         hashtagAssignment.add(hashTagFun);
         hashtagAssignment.add(hashTagPub);
         hashtagAssignment.add(hashTagTransport);
+        hashtagAssignment.add(hashTagDeceivers);
 
         ArrayAdapter<String> hashtagAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, hashtagAssignment);

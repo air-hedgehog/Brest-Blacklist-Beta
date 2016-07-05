@@ -4,9 +4,7 @@ import java.text.SimpleDateFormat;
 
 public class Utils {
 
-    public static final int FLEETIN_PAIN = 71924797;
     public static final int BREST_BLACKLIST = 84025643;
-    public static final int CLOSED_NONAME = 122565629;
     public static final int UPLOAD_NOTIFICATION_ID = 127;
 
     public static String getDate(long date){

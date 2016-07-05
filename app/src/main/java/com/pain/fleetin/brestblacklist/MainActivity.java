@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,17 +16,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.pain.fleetin.brestblacklist.VKUtils.LoginActivity;
 import com.pain.fleetin.brestblacklist.VKUtils.VKUpload;
-import com.pain.fleetin.brestblacklist.adapter.BeautyAndHealthAdapter;
+import com.pain.fleetin.brestblacklist.adapter.MainFragmentAdapter;
 import com.pain.fleetin.brestblacklist.adapter.TabAdapter;
 import com.pain.fleetin.brestblacklist.database.DBHelper;
-import com.pain.fleetin.brestblacklist.list_fragments.BeautyAndHealthFragment;
+import com.pain.fleetin.brestblacklist.list_fragments.MainFragment;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 import com.pain.fleetin.brestblacklist.new_crime_dialog.AddingCrimeDialogFragment;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -46,11 +50,11 @@ public class MainActivity extends AppCompatActivity
 
 
     public DBHelper dbHelper;
-    public BeautyAndHealthAdapter beautyAndHealthAdapter;
+    public MainFragmentAdapter mainFragmentAdapter;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private FragmentManager fragmentManager;
-    private BeautyAndHealthFragment beautyAndHealthFragment;
+    private MainFragment mainFragment;
     private VKUpload vkUpload;
     private VKUpload.UploadOnePhoto uploadOnePhoto;
 
@@ -63,6 +67,7 @@ public class MainActivity extends AppCompatActivity
     String hashTagFun;
     String hashTagPub;
     String hashTagTransport;
+    String hashTagDeceivers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +78,11 @@ public class MainActivity extends AppCompatActivity
         dbHelper = new DBHelper(getApplicationContext());
         fragmentManager = getFragmentManager();
 
-        beautyAndHealthFragment = new BeautyAndHealthFragment();
-        beautyAndHealthAdapter = new BeautyAndHealthAdapter(beautyAndHealthFragment, this);
+        mainFragment = new MainFragment();
+        mainFragmentAdapter = new MainFragmentAdapter(mainFragment, this);
 
         setUI();
-        beautyAndHealthAdapter.removeAllItems();
+        mainFragmentAdapter.removeAllItems();
         dbHelper.query().removeCrimes();
         vkRequest();
 
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         hashTagFun = getResources().getString(R.string.hashtag_fun);
         hashTagPub = getResources().getString(R.string.hashtag_pub);
         hashTagTransport = getResources().getString(R.string.hashtag_transport);
+        hashTagDeceivers = getResources().getString(R.string.hastag_deceivers);
 
     }
 
@@ -102,7 +108,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void vkRequest() {
-        beautyAndHealthAdapter.removeAllItems();
+        mainFragmentAdapter.removeAllItems();
         VKRequest vkRequest = new VKApiGroups()
                 .getById(VKParameters.from("group_ids", 84025643));
 
@@ -173,7 +179,7 @@ public class MainActivity extends AppCompatActivity
 
     public void vkQuery(List<ModelCard> crimePosts) {
         for (int i = 0; i < crimePosts.size(); i++) {
-            beautyAndHealthFragment.addCrime(crimePosts.get(i), true);
+            mainFragment.addCrime(crimePosts.get(i), true);
         }
     }
 
@@ -210,7 +216,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                beautyAndHealthFragment.findCrimes(newText);
+                mainFragment.findCrimes(newText);
                 return false;
             }
         });
@@ -245,7 +251,7 @@ public class MainActivity extends AppCompatActivity
             }
         });*/
 
-        beautyAndHealthFragment = (BeautyAndHealthFragment) tabAdapter.getItem(TabAdapter.BEAUTY_AND_HEALTH_FRAGMENT_POSITION);
+        mainFragment = (MainFragment) tabAdapter.getItem(TabAdapter.BEAUTY_AND_HEALTH_FRAGMENT_POSITION);
         /*buyFragment = (BuyFragment) tabAdapter.getItem(TabAdapter.BUY_FRAGMENT_POSITION);
         funFragment = (FunFragment) tabAdapter.getItem(TabAdapter.FUN_FRAGMENT_POSITION);
         pubFragment = (PubFragment) tabAdapter.getItem(TabAdapter.PUB_FRAGMENT_POSITION);
@@ -272,7 +278,21 @@ public class MainActivity extends AppCompatActivity
             searchView.setQuery(hashTagPub, false);
         } else if (res == R.id.menu_navigation_item_transport){
             searchView.setQuery(hashTagTransport, false);
+        } else if (res == R.id.menu_navigation_item_deceivers) {
+            searchView.setQuery(hashTagDeceivers, false);
         }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
     }
 
     @Override
@@ -283,12 +303,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
+        if (id == R.id.menu_logout) {
+
+            VKSdk.logout();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     public void uploadProgressNotification() {
         nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

@@ -9,21 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pain.fleetin.brestblacklist.R;
-import com.pain.fleetin.brestblacklist.adapter.BeautyAndHealthAdapter;
+import com.pain.fleetin.brestblacklist.adapter.MainFragmentAdapter;
 import com.pain.fleetin.brestblacklist.database.DBHelper;
 import com.pain.fleetin.brestblacklist.model.ModelCard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefreshLayout.OnRefreshListener {
-    private BeautyAndHealthAdapter beautyAndHealthAdapter;
+public class MainFragment extends CrimeFragment implements SwipeRefreshLayout.OnRefreshListener {
+    private MainFragmentAdapter mainFragmentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private static final int LAYOUT = R.layout.fragment_health_and_beauty;
+    private static final int LAYOUT = R.layout.fragment_main;
 
 
-    public BeautyAndHealthFragment(){
+    public MainFragment(){
 
     }
 
@@ -37,8 +37,8 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        beautyAndHealthAdapter = new BeautyAndHealthAdapter(this, getActivity().getApplicationContext());
-        recyclerView.setAdapter(beautyAndHealthAdapter);
+        mainFragmentAdapter = new MainFragmentAdapter(this, getActivity().getApplicationContext());
+        recyclerView.setAdapter(mainFragmentAdapter);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(R.color.colorWhite, R.color.colorPrimary,
@@ -51,9 +51,9 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
 
         int position = -1;
         checkAdapter();
-        for (int i = 0; i < beautyAndHealthAdapter.getItemCount(); i++) {
+        for (int i = 0; i < mainFragmentAdapter.getItemCount(); i++) {
 
-            ModelCard crime = (ModelCard) beautyAndHealthAdapter.getItem(i);
+            ModelCard crime = (ModelCard) mainFragmentAdapter.getItem(i);
             if (modelCard.getDate() > crime.getDate()) {
                 position = i;
                 break;
@@ -61,9 +61,9 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
         }
 
         if (position != -1) {
-            beautyAndHealthAdapter.addItem(position, modelCard);
+            mainFragmentAdapter.addItem(position, modelCard);
         } else {
-            beautyAndHealthAdapter.addItem(modelCard);
+            mainFragmentAdapter.addItem(modelCard);
         }
 
         if (saveToDB){
@@ -73,14 +73,14 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
 
     @Override
     public void checkAdapter() {
-        if (beautyAndHealthAdapter == null){
-            beautyAndHealthAdapter = new BeautyAndHealthAdapter(this, getActivity().getApplicationContext());
+        if (mainFragmentAdapter == null){
+            mainFragmentAdapter = new MainFragmentAdapter(this, getActivity().getApplicationContext());
         }
     }
 
     @Override
     public void addCrimeFromDB() {
-        beautyAndHealthAdapter.removeAllItems();
+        mainFragmentAdapter.removeAllItems();
         List<ModelCard> crimes = new ArrayList<>();
         crimes.addAll(activity
                 .dbHelper
@@ -94,7 +94,7 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
 
     @Override
     public void findCrimes(String title) {
-        beautyAndHealthAdapter.removeAllItems();
+        mainFragmentAdapter.removeAllItems();
 
         List<ModelCard> crimes = new ArrayList<>();
 
@@ -109,7 +109,7 @@ public class BeautyAndHealthFragment extends CrimeFragment implements SwipeRefre
 
     @Override
     public void onRefresh() {
-        beautyAndHealthAdapter.removeAllItems();
+        mainFragmentAdapter.removeAllItems();
         activity.dbHelper.query().removeCrimes();
         activity.vkRequest();
         swipeRefreshLayout.postDelayed(new Runnable() {

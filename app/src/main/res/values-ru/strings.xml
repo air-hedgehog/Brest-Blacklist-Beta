@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Brest Blacklist Beta</string>
+    <integer name="com_vk_sdk_AppId">5489677</integer>
+    <string name="search_title">Поиск</string>
+
+    <string name="toolbar_menu_logout_item">Выйти</string>
+
+    <string name="menu_item_beauty">Красота и Здоровье</string>
+    <string name="menu_item_buy">Покупки</string>
+    <string name="menu_item_fun">Развлечения</string>
+    <string name="menu_item_pub">Общепит</string>
+    <string name="menu_item_transport">Транспорт</string>
+    <string name="menu_item_deceivers">Люди и мошенники</string>
+
+    <string name="view_navigation_open">Открыть</string>
+    <string name="view_navigation_close">Закрыть</string>
+
+    <string name="hashtag_beauty">#Красота_и_Здоровье</string>
+    <string name="hashtag_buy">#Покупки</string>
+    <string name="hashtag_transport">#Транспорт</string>
+    <string name="hashtag_pub">#Общепит</string>
+    <string name="hashtag_fun">#Развлечения</string>
+    <string name="hastag_deceivers">#Люди_и_мошенники</string>
+
+    <string name="new_crime_dialog_label">Новая запись</string>
+    <string name="new_crime_title">Описание:</string>
+    <string name="post_time_mark">Произошло в:</string>
+
+    <string name="new_title_hint">Описание</string>
+    <string name="new_date_hint">Дата</string>
+    <string name="new_time_hint">Время</string>
+
+    <string name="dialog_error_empty_title">Пожалуйста, введите описание</string>
+    <string name="dialog_choose_category">Пожалуйста, выберите категорию</string>
+    <string name="dialog_cancel_button">Отмена</string>
+    <string name="dialog_OK_button">OK</string>
+    <string name="dialog_hashtag_spinner_hint">Пожалуйста, выберите категорию:</string>
+    <string name="dialog_take_a_picture_button">Добавить фото</string>
+    <string name="dialog_remove_picture">Удалить фото</string>
+    <string name="dialog_set_location">Добавить местоположение</string>
+    <string name="dialog_remove_location">Удалить местоположение</string>
+    <string name="dialog_toast_image_added">Фото добавлено</string>
+    <string name="dialog_toast_location_added">Местоположение добавлено</string>
+    <string name="dialog_toast_location_removed">Местоположение удалено</string>
+
+    <string name="notification_ticker">Отправка…</string>
+    <string name="notification_title">Загрузка</string>
+    <string name="notification_text">Публикация записи</string>
+
+    <string name="toast_uploading_done">Ваша запись скоро будет доступна</string>
+    <string name="toast_uploading_error">Ошибка отправки записи!</string>
+    <string name="toast_uploading_photo_error">Ошибка при загрузке фото!</string>
+
+    <string name="action_sign_in_short">Войти через VK</string>
+    <string name="continue_using_app">Продолжить с этой учетной записью</string>
+    <string name="logout">Выйти</string>
+    <string name="authentication_error">Ошибка аутентификации</string>
+    <string name="dialog_photos_of"> из 3</string>
+
+</resources>
